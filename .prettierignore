@@ -1,0 +1,17 @@
+# Ignore build and output directories
+/.next
+/out
+/dist
+
+# Ignore node_modules directory
+/node_modules
+
+# Ignore static files
+/public
+
+# Ignore configuration files
+/.env
+
+# Ignore version control files
+/.git
+/.gitignore
