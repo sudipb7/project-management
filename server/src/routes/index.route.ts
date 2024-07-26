@@ -3,10 +3,10 @@ import { Router } from "express";
 import IndexController from "../controllers/index.controller";
 import { Routes } from "../types";
 
-class IndexRoute implements Routes {
+class IndexRouter implements Routes {
   public path = "/";
   public router = Router();
-  public controller = new IndexController();
+  private controller = new IndexController();
 
   constructor() {
     this.initializeRoutes();
@@ -17,4 +17,4 @@ class IndexRoute implements Routes {
   }
 }
 
-export default IndexRoute;
+export default IndexRouter;

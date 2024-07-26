@@ -5,7 +5,10 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "prettier": "prettier --write \"**/*.{ts,tsx,js,mjs,json,yaml,css,md}\""
+    "prettier": "prettier --write \"**/*.{ts,tsx,js,mjs,json,yaml,css,md}\"",
+    "db:generate": "pnpm -F server db:generate",
+    "db:migrate": "pnpm -F server db:migrate",
+    "db:studio": "pnpm -F server db:studio"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
