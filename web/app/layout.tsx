@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 
 export const metadata: Metadata = {
-  title: "Columnz.dev",
+  title: "Columnz",
   description: "Project Management made easy.",
 };
 
@@ -44,7 +44,7 @@ export default async function RootLayout({
             attribute="class"
             defaultTheme="system"
             enableSystem
-            storageKey="columnz.dev-theme"
+            storageKey="columnz-theme"
           >
             {children}
           </ThemeProvider>

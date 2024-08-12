@@ -1,1 +1,1 @@
-# Columnz.dev
+# Columnz

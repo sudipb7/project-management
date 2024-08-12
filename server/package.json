@@ -23,22 +23,20 @@
     "@types/node": "^20",
     "@types/uuid": "^10.0.0",
     "nodemon": "^3.1.4",
-    "prisma": "^5.17.0",
+    "prisma": "^5.18.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.617.0",
     "@aws-sdk/s3-request-presigner": "^3.617.0",
-    "@prisma/client": "5.17.0",
+    "@prisma/client": "5.18.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
     "uuid": "^10.0.0",
-    "winston": "^3.13.1",
-    "winston-daily-rotate-file": "^5.0.0",
     "zod": "^3.23.8"
   }
 }

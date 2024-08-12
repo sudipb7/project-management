@@ -1,5 +1,5 @@
 {
-  "name": "columnz.dev",
+  "name": "columnz",
   "private": true,
   "scripts": {
     "build": "turbo build",

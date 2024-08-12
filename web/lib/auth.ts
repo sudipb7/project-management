@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
 
-import { createUser, getUserByEmail, getUserById } from "@/lib/queries";
+import { api, getUserByEmail } from "@/lib/api";
 
 export const {
   auth,
@@ -15,12 +15,14 @@ export const {
     Github({ allowDangerousEmailAccountLinking: true }),
   ],
   callbacks: {
-    async jwt({ token }) {
+    async jwt({ token, profile }) {
       if (!token.sub) return token;
+      if (!profile?.email) return token;
 
-      const user = await getUserById(token.sub);
+      const user = await getUserByEmail(profile.email);
       if (!user) return token;
 
+      token.userId = user.id;
       token.name = user.name;
       token.email = user.email;
 
@@ -33,6 +35,7 @@ export const {
         session.user.email = token.email;
       }
 
+      session.user.userId = token.userId as string;
       session.user.name = token.name;
 
       return session;
@@ -44,11 +47,15 @@ export const {
       if (existingUser) return true;
 
       if (!existingUser) {
-        await createUser({
-          email: profile.email,
-          name: profile.name,
-        });
-        return true;
+        try {
+          await api.post("/users", {
+            email: profile.email,
+            name: profile.name,
+          });
+          return true;
+        } catch (error) {
+          return false;
+        }
       }
       return false;
     },

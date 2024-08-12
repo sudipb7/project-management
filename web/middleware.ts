@@ -17,14 +17,7 @@ export default auth((req) => {
   }
 
   if (!isLoggedIn && !isAuthRoute && !isPublicRoute) {
-    let redirectUrl = nextUrl.pathname;
-    if (nextUrl.search) {
-      redirectUrl += nextUrl.search;
-    }
-
-    const encodedRedirectUrl = encodeURIComponent(redirectUrl);
-
-    return Response.redirect(new URL(`/sign-in?redirectTo=${encodedRedirectUrl}`, nextUrl));
+    return Response.redirect(new URL("/sign-in", nextUrl));
   }
 
   return;

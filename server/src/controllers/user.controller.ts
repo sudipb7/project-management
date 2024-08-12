@@ -29,6 +29,26 @@ class UserController {
 
       return res.status(200).json({ message: "Users fetched successfully", users, count, isNext });
     } catch (error) {
+      console.log(JSON.stringify(error));
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
+  public getUserByEmail: RequestHandler = async (req, res) => {
+    try {
+      const email = req.params.email;
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      const user = await this.userService.getUniqueUser({ email });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.status(200).json({ message: "User fetched successfully", user });
+    } catch (error) {
+      console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });
     }
   };
@@ -47,25 +67,26 @@ class UserController {
 
       return res.status(200).json({ message: "User fetched successfully", user });
     } catch (error) {
+      console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });
     }
   };
 
-  public getUsersByOrganization: RequestHandler = async (req, res) => {
+  public getUsersByWorkspace: RequestHandler = async (req, res) => {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const take = parseInt(req.query.take as string) || 10;
       const skip = (page - 1) * take;
-      const organizationId = req.params.id;
+      const workspaceId = req.params.id;
       const isAdmin = req.query.isAdmin === "true";
       let where = {};
 
-      if (organizationId) {
-        where = { members: { some: { organizationId } } };
+      if (workspaceId) {
+        where = { members: { some: { workspaceId } } };
       }
 
       if (isAdmin) {
-        where = { members: { some: { organizationId }, role: MemberRole.ADMIN } };
+        where = { members: { some: { workspaceId }, role: MemberRole.ADMIN } };
       }
 
       const count = await this.userService.getUserCount(where);
@@ -75,6 +96,7 @@ class UserController {
 
       return res.status(200).json({ message: "Users fetched successfully", users, count, isNext });
     } catch (error) {
+      console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });
     }
   };
@@ -103,10 +125,15 @@ class UserController {
       const key = `user/${email}/${file.originalname}`;
       await this.s3Service.uploadToS3(key, file.buffer, file.mimetype);
 
-      const user = await this.userService.createUser({ name, email, image: key });
+      const user = await this.userService.createUser({
+        name,
+        email,
+        image: key,
+      });
 
       return res.status(200).json({ message: "User created successfully", user });
     } catch (error) {
+      console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });
     }
   };
@@ -125,7 +152,7 @@ class UserController {
         return res.status(400).json({ message: schema.error.errors[0].message });
       }
 
-      const { name, email, image } = schema.data;
+      const { name, email } = schema.data;
 
       const user = await this.userService.getUniqueUser({ id });
       if (!user) {
@@ -133,7 +160,7 @@ class UserController {
       }
 
       if (!file) {
-        const updatedUser = await this.userService.updateUser({ id }, { name, email, image });
+        const updatedUser = await this.userService.updateUser({ id }, { name, email });
         return res.status(200).json({ message: "User updated successfully", user: updatedUser });
       }
 
@@ -148,6 +175,7 @@ class UserController {
 
       return res.status(200).json({ message: "User updated successfully", user: updatedUser });
     } catch (error) {
+      console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });
     }
   };
@@ -174,6 +202,7 @@ class UserController {
 
       return res.status(200).json({ message: "Image deleted successfully", user: updatedUser });
     } catch (error) {
+      console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });
     }
   };

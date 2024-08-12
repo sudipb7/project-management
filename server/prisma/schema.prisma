@@ -27,25 +27,24 @@ model User {
 }
 
 model Member {
-  id             String     @id @default(cuid())
-  userId         String     @map("user_id")
-  organizationId String     @map("organization_id")
-  role           MemberRole @default(MEMBER)
+  id          String     @id @default(cuid())
+  userId      String     @map("user_id")
+  workspaceId String     @map("workspace_id")
+  role        MemberRole @default(MEMBER)
 
-  user         User         @relation(fields: [userId], references: [id])
-  organization Organization @relation(fields: [organizationId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([userId, organizationId])
+  @@unique([userId, workspaceId])
   @@map("members")
 }
 
-model Organization {
+model Workspace {
   id          String  @id @default(cuid())
   name        String
-  slug        String  @unique
   image       String?
   description String?
   inviteCode  String  @unique @map("invite_code")
@@ -55,5 +54,5 @@ model Organization {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("organizations")
+  @@map("workspaces")
 }

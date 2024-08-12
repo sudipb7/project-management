@@ -4,7 +4,6 @@ import morgan from "morgan";
 import express from "express";
 
 import { Routes } from "./types";
-import { logger, stream } from "./lib/logger";
 import { LOG_FORMAT, PORT, CORS_ORIGIN, NODE_ENV } from "./lib/config";
 
 class Server {
@@ -26,10 +25,10 @@ class Server {
 
   public listen() {
     this.httpServer.listen(this.port, () => {
-      logger.info(`=================================`);
-      logger.info(`======= ENV: ${this.env} =======`);
-      logger.info(`🚀 Columnz server is running on the port ${this.port}`);
-      logger.info(`=================================`);
+      console.log(`=================================`);
+      console.log(`======= ENV: ${this.env} =======`);
+      console.log(`🚀 Columnz server is running on the port ${this.port}`);
+      console.log(`=================================`);
     });
   }
 
@@ -41,7 +40,7 @@ class Server {
     this.app.use(express.static("public"));
     this.app.use(express.json({ limit: "50mb" }));
     this.app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-    this.app.use(morgan(LOG_FORMAT || "dev", { stream }));
+    this.app.use(morgan(LOG_FORMAT || "dev"));
     this.app.use(cors({ origin: CORS_ORIGIN }));
   }
 
