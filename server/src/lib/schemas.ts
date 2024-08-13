@@ -10,3 +10,9 @@ export const WorkspaceSchema = z.object({
   description: z.optional(z.string()),
   adminId: z.string().min(1, { message: "Admin ID is required" }),
 });
+
+export const InviteSchema = z.object({
+  workspaceId: z.string().min(1, { message: "Workspace ID is required" }),
+  email: z.string().email({ message: "Invalid email" }),
+  adminId: z.string().min(1, { message: "Admin ID is required" }),
+});

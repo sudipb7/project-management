@@ -23,8 +23,6 @@ class WorkspaceRoute implements Routes {
       .get(this.controller.getWorkspaceById)
       .patch(upload.single("image"), this.controller.updateWorkspace);
     this.router.route(`${this.path}/user/:id`).get(this.controller.getWorkspacesByUser);
-    this.router.route(`${this.path}/invite`).get(this.controller.joinWorkspaceByInviteCode);
-    this.router.route(`${this.path}/invite/:id`).patch(this.controller.updateInviteCode);
   }
 }
 

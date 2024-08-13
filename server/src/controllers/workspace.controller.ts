@@ -94,7 +94,6 @@ class WorkspaceController {
         name,
         description,
         members: { create: { userId: adminId, role: "ADMIN" } },
-        inviteCode: uuidv4(),
       });
 
       if (!file) {
@@ -172,74 +171,6 @@ class WorkspaceController {
       return res
         .status(200)
         .json({ message: "Workspace updated successfully", workspace: updatedWorkspace });
-    } catch (error) {
-      console.log(JSON.stringify(error));
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  };
-
-  public updateInviteCode: RequestHandler = async (req, res) => {
-    try {
-      const id = req.params.id;
-      const adminId = req.body.adminId;
-
-      if (!adminId) {
-        return res.status(400).json({ message: "Admin ID is required" });
-      }
-
-      if (!id) {
-        return res.status(400).json({ message: "Workspace ID is required" });
-      }
-
-      const workspace = await this.workspaceService.getUniqueWorkspace({ id });
-      if (!workspace) {
-        return res.status(404).json({ message: "Workspace not found" });
-      }
-
-      const isAdmin = workspace?.members.find(
-        (member) => member.userId === adminId && member.role === MemberRole.ADMIN
-      );
-      if (!isAdmin) {
-        return res.status(403).json({ message: "You are not authorized to update this workspace" });
-      }
-
-      const updatedWorkspace = await this.workspaceService.updateWorkspace(id, {
-        inviteCode: uuidv4(),
-      });
-
-      return res
-        .status(200)
-        .json({ message: "Invite code updated successfully", workspace: updatedWorkspace });
-    } catch (error) {
-      console.log(JSON.stringify(error));
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  };
-
-  public joinWorkspaceByInviteCode: RequestHandler = async (req, res) => {
-    try {
-      const userId = req.body.id;
-      const inviteCode = req.body.inviteCode;
-
-      if (!inviteCode) {
-        return res.status(400).json({ message: "Invite code is required" });
-      }
-
-      const workspace = await this.workspaceService.getWorkspace({ inviteCode });
-      if (!workspace) {
-        return res.status(404).json({ message: "Workspace not found" });
-      }
-
-      const isMember = workspace.members.find((member) => member.userId === userId);
-      if (isMember) {
-        return res.status(400).json({ message: "You are already a member of this workspace" });
-      }
-
-      await this.workspaceService.updateWorkspace(workspace.id, {
-        members: { create: { userId, role: MemberRole.MEMBER } },
-      });
-
-      return res.status(200).json({ message: "You have joined the workspace successfully" });
     } catch (error) {
       console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });

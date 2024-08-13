@@ -12,6 +12,12 @@ enum MemberRole {
   MEMBER
 }
 
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 model User {
   id    String  @id @default(cuid())
   name  String
@@ -19,6 +25,7 @@ model User {
   email String  @unique
 
   members Member[]
+  invites Invite[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -47,12 +54,31 @@ model Workspace {
   name        String
   image       String?
   description String?
-  inviteCode  String  @unique @map("invite_code")
 
   members Member[]
+  invites Invite[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("workspaces")
+}
+
+model Invite {
+  id          String       @id @default(cuid())
+  code        String       @unique
+  userId      String       @map("user_id")
+  workspaceId String       @map("workspace_id")
+  expiresAt   DateTime     @map("expires_at")
+  status      InviteStatus @default(PENDING)
+
+  user      User      @relation(fields: [userId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([workspaceId])
+  @@index([userId])
+  @@map("invites")
 }
