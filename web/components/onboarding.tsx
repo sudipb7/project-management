@@ -11,7 +11,7 @@ import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { AnimatePresence, MotionDiv, MotionSpan } from "./motion";
+import { AnimatePresence, MotionSpan } from "./motion";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 
 const schema = z.object({
@@ -61,12 +61,7 @@ export default function Onboarding({ user }: { user: any }) {
   return (
     <section className="min-h-screen w-full grid place-items-center bg-background">
       <div className="w-full overflow-hidden relative rounded-lg grid place-items-center">
-        <MotionDiv
-          initial={{ filter: "blur(6px)", opacity: 0 }}
-          animate={{ filter: "blur(0px)", opacity: 100 }}
-          transition={{ type: "tween", duration: 0.5, ease: "linear" }}
-          className="p-6 w-full max-w-sm"
-        >
+        <div className="p-6 w-full max-w-sm">
           <h1 className="md:text-lg font-bold tracking-wide">Define Your Workspace</h1>
           <p className="text-xs md:text-sm font-medium text-muted-foreground font-mono">
             Create a workspace to get started
@@ -95,7 +90,10 @@ export default function Onboarding({ user }: { user: any }) {
                 type="submit"
                 disabled={isLoading}
                 size="sm"
-                className={cn("w-full", buttonStatus === "failed" && "text-red-500")}
+                className={cn(
+                  "w-full disabled:opacity-100",
+                  buttonStatus === "failed" && "text-red-500"
+                )}
               >
                 <AnimatePresence mode="popLayout" initial={false}>
                   <MotionSpan
@@ -111,7 +109,7 @@ export default function Onboarding({ user }: { user: any }) {
               </Button>
             </form>
           </Form>
-        </MotionDiv>
+        </div>
       </div>
     </section>
   );

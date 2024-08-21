@@ -60,6 +60,7 @@ export const {
       return false;
     },
   },
+  trustHost: true,
   pages: { signIn: "/sign-in" },
   session: { strategy: "jwt" },
   debug: process.env.NODE_ENV === "development",

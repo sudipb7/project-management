@@ -1,7 +1,10 @@
 import { signIn } from "@/lib/auth";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { MotionSection } from "@/components/motion";
+
+export const metadata = {
+  title: "Sign in | ColumnZ",
+};
 
 export default async function SignInPage() {
   const redirectTo = "/onboarding";
@@ -18,12 +21,7 @@ export default async function SignInPage() {
 
   return (
     <main className="min-h-screen p-4 flex items-center justify-center">
-      <MotionSection
-        initial={{ filter: "blur(6px)", opacity: 0 }}
-        animate={{ filter: "blur(0px)", opacity: 100 }}
-        transition={{ type: "tween", duration: 0.5, ease: "linear" }}
-        className="w-full max-w-sm p-4"
-      >
+      <section className="w-full max-w-sm p-4">
         <h1 className="md:text-lg font-bold tracking-wide text-primary">Almost There</h1>
         <p className="text-xs md:text-sm font-medium text-muted-foreground font-mono">
           Sign in to continue with Columnz.
@@ -48,7 +46,7 @@ export default async function SignInPage() {
             Continue with Github
           </Button>
         </form>
-      </MotionSection>
+      </section>
     </main>
   );
 }

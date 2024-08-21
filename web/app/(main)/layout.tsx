@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import SideNavigation from "@/components/navigation";
 import { currentUser, getUserWorkspaces } from "@/lib/api";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
@@ -18,7 +19,10 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   return (
     <div className="relative">
       <SideNavigation />
-      <main className="relative pl-[75px] min-h-screen w-full">{children}</main>
+      <main className="relative md:pl-60 min-h-screen w-full">
+        <DashboardHeader user={user} />
+        {children}
+      </main>
     </div>
   );
 }

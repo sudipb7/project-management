@@ -8,5 +8,7 @@ export default async function WorkspacePage({ params }: { params: { workspaceId:
     notFound();
   }
 
-  return <pre className="whitespace-pre-wrap p-4">{JSON.stringify(workspace, null, 2)}</pre>;
+  return (
+    <pre className="whitespace-pre-wrap p-4 text-xs">{JSON.stringify(workspace, null, 2)}</pre>
+  );
 }
