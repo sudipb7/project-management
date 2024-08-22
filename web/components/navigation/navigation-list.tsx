@@ -41,19 +41,19 @@ export const SideNavigationList = ({ workspaces }: { workspaces: Record<string, 
   ];
 
   return (
-    <nav className="grid items-start px-4 text-sm font-medium gap-y-1 pt-0.5 transition-all">
-      {links.map(({ href, label, Icon }) => {
+    <nav className="grid items-start gap-y-1 px-4 text-sm font-medium pt-0.5 transition-all">
+      {links.map(({ Icon, href, label }) => {
         const isActive = pathname.includes(href);
         return (
           <Link
             key={href}
             href={href}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8",
+              "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8 group",
               isActive ? "text-primary bg-muted hover:text-primary" : "text-muted-foreground"
             )}
           >
-            <Icon className="h-4 w-4" />
+            <Icon className="h-4 w-4 group-hover:animate-jiggle transition-all" />
             {label}
           </Link>
         );

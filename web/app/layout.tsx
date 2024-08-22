@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { auth } from "@/lib/auth";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { ModalProvider } from "@/components/providers/modal-provider";
 
 export const metadata: Metadata = {
   title: "Columnz",
@@ -46,7 +47,7 @@ export default async function RootLayout({
             enableSystem
             storageKey="columnz-theme"
           >
-            {children}
+            <ModalProvider>{children}</ModalProvider>
           </ThemeProvider>
         </body>
       </html>

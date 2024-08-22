@@ -23,7 +23,7 @@ export default async function SideNavigation() {
   }));
 
   return (
-    <div className="border-r bg-card hidden md:block w-60 fixed inset-y-0 left-0 z-30 pb-3">
+    <div className="border-r bg-background hidden md:block w-64 fixed inset-y-0 left-0 z-30 pb-3">
       <div className="flex h-full max-h-screen flex-col gap-2">
         <SideNavigationHeader data={comboboxData} />
         <div className="flex-1">
