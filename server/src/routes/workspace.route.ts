@@ -21,7 +21,8 @@ class WorkspaceRoute implements Routes {
     this.router
       .route(`${this.path}/:id`)
       .get(this.controller.getWorkspaceById)
-      .patch(upload.single("image"), this.controller.updateWorkspace);
+      .patch(upload.single("image"), this.controller.updateWorkspace)
+      .delete(this.controller.deleteWorkspace);
     this.router.route(`${this.path}/user/:id`).get(this.controller.getWorkspacesByUser);
   }
 }

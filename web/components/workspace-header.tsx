@@ -18,7 +18,7 @@ export const WorkspaceHeader = ({ user }: { user: any }) => {
 
   React.useEffect(() => {
     const fetchWorkspaces = async () => {
-      const fetchedWorkspaces = await getUserWorkspaces(user.id);
+      const fetchedWorkspaces = await getUserWorkspaces(user.id, { includeMembers: true });
       setWorkspaces(fetchedWorkspaces);
     };
     fetchWorkspaces();
@@ -50,7 +50,7 @@ export const WorkspaceHeader = ({ user }: { user: any }) => {
                 priority
               />
             ) : (
-              <span className="w-full h-full grid place-items-center bg-muted text-white text-xs font-medium">
+              <span className="w-full h-full grid place-items-center bg-foreground text-background text-xs font-medium">
                 {currentWorkspace?.name[0]}
               </span>
             )}
@@ -68,10 +68,10 @@ export const WorkspaceHeader = ({ user }: { user: any }) => {
       </header>
       {comboboxData?.length > 0 && (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="left" className="w-full max-w-64 px-0 pb-3 pt-10 flex flex-col gap-2">
+          <SheetContent side="left" className="w-64 px-0 pb-3 pt-10 flex flex-col gap-2">
             <SideNavigationHeader data={comboboxData} />
             <div className="flex-1">
-              <SideNavigationList workspaces={workspaces} />
+              <SideNavigationList user={user} workspaces={workspaces} />
             </div>
             <div className="px-2">
               <UserDropdownMenu user={user} />

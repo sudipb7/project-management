@@ -1,7 +1,9 @@
+import { v4 as uuid } from "uuid";
 import { RequestHandler } from "express";
 import { MemberRole } from "@prisma/client";
 
 import { UserSchema } from "../lib/schemas";
+import { AWS_URL_PREFIX } from "../lib/config";
 import S3Service from "../services/s3.service";
 import UserService from "../services/user.service";
 
@@ -122,13 +124,13 @@ class UserController {
         return res.status(200).json({ message: "User created successfully", user });
       }
 
-      const key = `user/${email}/${file.originalname}`;
-      await this.s3Service.uploadToS3(key, file.buffer, file.mimetype);
+      const key = `user/${email}/${uuid()}-${file.originalname.replace(/ /g, "-")}`;
+      await this.s3Service.uploadToS3(key, file.buffer, file.mimetype.split("/")[1]);
 
       const user = await this.userService.createUser({
         name,
         email,
-        image: key,
+        image: AWS_URL_PREFIX + key,
       });
 
       return res.status(200).json({ message: "User created successfully", user });
@@ -165,13 +167,16 @@ class UserController {
       }
 
       if (user.image) {
-        await this.s3Service.deleteFromS3(user.image);
+        await this.s3Service.deleteFromS3(user.image.replace(AWS_URL_PREFIX!, ""));
       }
 
-      const key = `user/${id}/${file.originalname}`;
-      await this.s3Service.uploadToS3(key, file.buffer, file.mimetype);
+      const key = `user/${user.email}/${uuid()}-${file.originalname.replace(/ /g, "-")}`;
+      await this.s3Service.uploadToS3(key, file.buffer, file.mimetype.split("/")[1]);
 
-      const updatedUser = await this.userService.updateUser({ id }, { name, email, image: key });
+      const updatedUser = await this.userService.updateUser(
+        { id },
+        { name, email, image: AWS_URL_PREFIX + key }
+      );
 
       return res.status(200).json({ message: "User updated successfully", user: updatedUser });
     } catch (error) {
@@ -196,7 +201,7 @@ class UserController {
         return res.status(404).json({ message: "User image not found" });
       }
 
-      await this.s3Service.deleteFromS3(user.image);
+      await this.s3Service.deleteFromS3(user.image.replace(AWS_URL_PREFIX!, ""));
 
       const updatedUser = await this.userService.updateUser({ id }, { image: null });
 

@@ -1,13 +1,18 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { Briefcase, Headphones, Home, MessageCircle, Users } from "lucide-react";
+import { Briefcase, Headphones, Home, MessageCircle, Settings, Users, Link } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-export const SideNavigationList = ({ workspaces }: { workspaces: Record<string, any> }) => {
+interface SideNavigationListProps {
+  user: { [key: string]: any };
+  workspaces: { [key: string]: any }[];
+}
+
+export const SideNavigationList = ({ user, workspaces }: SideNavigationListProps) => {
   const params = useParams();
   const pathname = usePathname();
   const currentWorkspace = workspaces.find((workspace: any) => workspace.id === params.workspaceId);
@@ -27,6 +32,7 @@ export const SideNavigationList = ({ workspaces }: { workspaces: Record<string, 
       href: `/workspace/${currentWorkspace?.id}/projects`,
       label: "Projects",
       Icon: Briefcase,
+      comingSoon: true,
     },
     {
       href: `/workspace/${currentWorkspace?.id}/people`,
@@ -37,25 +43,36 @@ export const SideNavigationList = ({ workspaces }: { workspaces: Record<string, 
       href: `/workspace/${currentWorkspace?.id}/huddle`,
       label: "Huddle",
       Icon: Headphones,
+      comingSoon: true,
+    },
+    {
+      href: `/workspace/${currentWorkspace?.id}/preferences`,
+      label: "Preferences",
+      Icon: Settings,
     },
   ];
 
   return (
     <nav className="grid items-start gap-y-1 px-4 text-sm font-medium pt-0.5 transition-all">
-      {links.map(({ Icon, href, label }) => {
-        const isActive = pathname.includes(href);
+      {links.map(({ Icon, href, label, comingSoon }) => {
+        const isActive = label === "Home" ? pathname === href : pathname.includes(href);
         return (
-          <Link
+          <NextLink
             key={href}
             href={href}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8 group",
+              "relative flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8 group",
               isActive ? "text-primary bg-muted hover:text-primary" : "text-muted-foreground"
             )}
           >
             <Icon className="h-4 w-4 group-hover:animate-jiggle transition-all" />
-            {label}
-          </Link>
+            {label}{" "}
+            {comingSoon && (
+              <span className="bg-foreground text-background text-[9px] font-mono px-1.5 rounded-full">
+                Coming soon
+              </span>
+            )}
+          </NextLink>
         );
       })}
     </nav>

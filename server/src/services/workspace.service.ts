@@ -6,9 +6,9 @@ class WorkspaceService {
 
   public getWorkspaces = async (
     where?: Prisma.WorkspaceWhereInput,
+    include?: Prisma.WorkspaceInclude,
     take?: number,
-    skip?: number,
-    include?: Prisma.WorkspaceInclude
+    skip?: number
   ) => {
     let filters = {};
 

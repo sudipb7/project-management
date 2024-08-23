@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useModal } from "@/hooks/use-modal";
+import { useModal } from "@/components/providers/modal-provider";
 import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 

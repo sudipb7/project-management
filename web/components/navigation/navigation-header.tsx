@@ -4,10 +4,10 @@ import React from "react";
 import { SquarePen } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
-import { useModal } from "@/hooks/use-modal";
+import { useModal } from "@/components/providers/modal-provider";
 import { Combobox, type ComboboxItem } from "@/components/ui/combobox";
 
-export const SideNavigationHeader = ({ data }: { data: ComboboxItem[] }) => {
+export const SideNavigationHeader = React.memo(({ data }: { data: ComboboxItem[] }) => {
   const modal = useModal();
   const params = useParams();
   const router = useRouter();
@@ -38,4 +38,6 @@ export const SideNavigationHeader = ({ data }: { data: ComboboxItem[] }) => {
       />
     </div>
   );
-};
+});
+
+SideNavigationHeader.displayName = "SideNavigationHeader";

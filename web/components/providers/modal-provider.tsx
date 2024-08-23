@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { LogOutModal } from "@/components/modals/log-out";
+import { DeleteWorkpspaceModal } from "@/components/modals/delete-workspace";
 import { CreateWorkpspaceModal } from "@/components/modals/create-workspace";
 
-export type ModalType = "logout" | "create-workspace";
+export type ModalType = "logout" | "create-workspace" | "delete-workspace";
 
 export type ModalState = {
   isOpen: boolean;
@@ -47,6 +48,14 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+export function useModal() {
+  const context = React.useContext(ModalContext);
+  if (!context) {
+    throw new Error("useModal must be used within a ModalProvider");
+  }
+  return context;
+}
+
 function Modals() {
   const [isMounted, setIsMounted] = React.useState(false);
 
@@ -62,6 +71,7 @@ function Modals() {
     <>
       <LogOutModal />
       <CreateWorkpspaceModal />
+      <DeleteWorkpspaceModal />
     </>
   );
 }

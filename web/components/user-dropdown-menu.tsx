@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useModal } from "@/hooks/use-modal";
+import { useModal } from "@/components/providers/modal-provider";
 
 export const UserDropdownMenu = ({ user }: { user: any }) => {
   const { setTheme, theme } = useTheme();

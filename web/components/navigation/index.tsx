@@ -11,7 +11,7 @@ export default async function SideNavigation() {
     return redirect("/sign-in");
   }
 
-  const workspaces = await getUserWorkspaces(user.id);
+  const workspaces = await getUserWorkspaces(user.id, { includeMembers: true });
   if (!workspaces) {
     return redirect("/sign-in");
   }
@@ -27,7 +27,7 @@ export default async function SideNavigation() {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <SideNavigationHeader data={comboboxData} />
         <div className="flex-1">
-          <SideNavigationList workspaces={workspaces} />
+          <SideNavigationList user={user} workspaces={workspaces} />
         </div>
         <div className="px-2">
           <UserDropdownMenu user={user} />

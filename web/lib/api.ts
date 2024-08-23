@@ -1,5 +1,6 @@
 import axios from "axios";
 import { auth } from "./auth";
+import { buildUrl } from "./utils";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -33,9 +34,13 @@ export const currentUser = async () => {
   }
 };
 
-export const getUserWorkspaces = async (userId: string) => {
+export const getUserWorkspaces = async (
+  userId: string,
+  options?: { [key: string]: number | string | boolean }
+) => {
   try {
-    return (await api.get(`/workspaces/user/${userId}`)).data.workspaces;
+    const url = buildUrl(`/workspaces/user/${userId}`, options);
+    return (await api.get(url)).data.workspaces;
   } catch (error: any) {
     return null;
   }

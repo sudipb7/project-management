@@ -22,7 +22,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { api } from "@/lib/api";
-import { useModal } from "@/hooks/use-modal";
+import { useModal } from "@/components/providers/modal-provider";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -34,8 +34,8 @@ type Values = z.infer<typeof schema>;
 
 export const CreateWorkpspaceModal = () => {
   const router = useRouter();
-  const { isOpen, onClose, type } = useModal();
   const session = useSession();
+  const { isOpen, onClose, type } = useModal();
 
   const form = useForm<Values>({
     resolver: zodResolver(schema),
@@ -56,6 +56,7 @@ export const CreateWorkpspaceModal = () => {
       } = await api.post(`/workspaces`, { ...values, adminId });
 
       router.push(`/workspace/${workspace.id}`);
+      router.refresh();
     } catch (error: any) {
       alert(error?.message || "Failed to create workspace. Please try again.");
       console.error("Failed to create workspace", error);
@@ -74,7 +75,7 @@ export const CreateWorkpspaceModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onModalClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-base">Create Workspace</DialogTitle>
           <DialogDescription className="text-sm">

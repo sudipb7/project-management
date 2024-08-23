@@ -19,10 +19,10 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   return (
     <div className="relative">
       <SideNavigation />
-      <main className="relative md:pl-64 min-h-screen w-full">
+      <div className="relative md:pl-64 min-h-screen w-full">
         <WorkspaceHeader user={user} />
-        {children}
-      </main>
+        <main className="p-4">{children}</main>
+      </div>
     </div>
   );
 }

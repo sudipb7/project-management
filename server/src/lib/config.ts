@@ -11,4 +11,5 @@ export const {
   AWS_BUCKET_NAME,
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_KEY_ID,
+  AWS_URL_PREFIX,
 } = process.env;
