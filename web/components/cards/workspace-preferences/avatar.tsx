@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { type WorkspacePreferencesProps } from ".";
@@ -34,10 +35,10 @@ export const WorkspaceImage = ({ isAdmin, currentWorkspace, user }: WorkspacePre
         headers: { "Content-Type": "multipart/form-data" },
       });
 
+      toast.success("Workspace avatar updated successfully.");
       router.refresh();
     } catch (error) {
-      console.log(error);
-      alert("An error occurred. Please try again.");
+      toast.error("Failed to update workspace avatar.");
     }
   };
 

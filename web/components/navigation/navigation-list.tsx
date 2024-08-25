@@ -35,8 +35,8 @@ export const SideNavigationList = ({ user, workspaces }: SideNavigationListProps
       comingSoon: true,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/people`,
-      label: "People",
+      href: `/workspace/${currentWorkspace?.id}/members`,
+      label: "Members",
       Icon: Users,
     },
     {

@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 import { RequestHandler } from "express";
 import { MemberRole } from "@prisma/client";
 
+import { db } from "../lib/db";
 import { AWS_URL_PREFIX } from "../lib/config";
 import { WorkspaceSchema } from "../lib/schemas";
 import S3Service from "../services/s3.service";
@@ -9,6 +10,7 @@ import UserService from "../services/user.service";
 import WorkspaceService from "../services/workspace.service";
 
 class WorkspaceController {
+  private db = db;
   private s3Service = new S3Service();
   private userService = new UserService();
   private workspaceService = new WorkspaceService();
@@ -66,7 +68,6 @@ class WorkspaceController {
       const userId = req.params.id;
       const isAdmin = req.query.isAdmin === "true";
       const includeMembers = req.query.includeMembers === "true";
-      const includeUsers = req.query.includeUsers === "true";
       let where = {};
       let include = {};
 
@@ -77,15 +78,34 @@ class WorkspaceController {
       }
 
       if (includeMembers) {
-        include = { members: true };
-      }
-      if (includeUsers) {
         include = { ...include, members: { include: { user: true } } };
       }
 
       const workspaces = await this.workspaceService.getWorkspaces(where, include);
 
       return res.status(200).json({ message: "Workspaces fetched successfully", workspaces });
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
+  public getWorkspaceMembers: RequestHandler = async (req, res) => {
+    try {
+      const workspaceId = req.params.id;
+      const role = req.query.role as string;
+      let filters = {};
+
+      if (role && role in MemberRole) {
+        filters = { role };
+      }
+
+      const members = await this.db.member.findMany({
+        where: { workspaceId, ...filters },
+        include: { user: true },
+      });
+
+      return res.status(200).json({ message: "Members fetched successfully", members });
     } catch (error) {
       console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });

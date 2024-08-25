@@ -40,10 +40,8 @@ export default async function WorkspacePreferencesPage({ params }: WorkspacePref
   }
 
   return (
-    <div className="mx-auto w-full max-w-xl lg:max-w-2xl xl:max-w-4xl flex-1 pb-4">
-      <h1 className="md:text-lg font-semibold tracking-[0.01em] font-mono">
-        Workspace Preferences
-      </h1>
+    <div className="mx-auto w-full max-w-xl lg:max-w-2xl xl:max-w-4xl flex-1 pb-4 pt-2">
+      <h1 className="text-lg md:text-xl font-bold tracking-wide">Workspace Preferences</h1>
       <WorkspacePreferences
         user={user}
         admins={admins}

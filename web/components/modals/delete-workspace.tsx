@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
@@ -43,11 +44,11 @@ export const DeleteWorkpspaceModal = () => {
 
       await api.delete(`/workspaces/${params.workspaceId}`, { data: { adminId } });
 
+      toast.success("Workspace deleted successfully");
       router.push("/");
       router.refresh();
     } catch (error: any) {
-      alert(error?.message || "Failed to delete workspace. Please try again.");
-      console.error("Failed to delete workspace", error);
+      toast.error("Failed to delete workspace.");
     } finally {
       setIsLoading(false);
       onModalClose();

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { z } from "zod";
+import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -51,10 +52,10 @@ export const WorkspaceDisplayName = ({
 
       await api.patch(`/workspaces/${currentWorkspace.id}`, { ...values, adminId: user.id });
 
+      toast.success("Workspace name updated successfully.");
       router.refresh();
     } catch (error) {
-      console.log(error);
-      alert("An error occurred. Please try again.");
+      toast.error("Failed to update workspace name.");
     }
   };
 

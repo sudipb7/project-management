@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { toast } from "sonner";
+import { Clipboard, ClipboardCheck } from "lucide-react";
 
 import {
   Card,
@@ -12,7 +14,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { type WorkspacePreferencesProps } from ".";
-import { Clipboard, ClipboardCheck } from "lucide-react";
 
 export const WorkspaceId = ({ currentWorkspace }: WorkspacePreferencesProps) => {
   const [isCopied, setIsCopied] = React.useState(false);
@@ -20,6 +21,7 @@ export const WorkspaceId = ({ currentWorkspace }: WorkspacePreferencesProps) => 
   const handleCopy = () => {
     navigator.clipboard.writeText(`workspace_${currentWorkspace.id}`);
     setIsCopied(true);
+    toast.success("Workspace ID copied to clipboard");
     setTimeout(() => setIsCopied(false), 2000);
   };
 

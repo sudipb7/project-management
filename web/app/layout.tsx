@@ -4,6 +4,7 @@ import { Space_Grotesk as FontSans, Space_Mono as FontMono } from "next/font/goo
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import { auth } from "@/lib/auth";
+import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
@@ -47,7 +48,10 @@ export default async function RootLayout({
             enableSystem
             storageKey="columnz-theme"
           >
-            <ModalProvider>{children}</ModalProvider>
+            <ModalProvider>
+              {children}
+              <Toaster />
+            </ModalProvider>
           </ThemeProvider>
         </body>
       </html>

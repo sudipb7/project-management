@@ -18,7 +18,6 @@ class UserRouter implements Routes {
       .route(this.path)
       .get(this.controller.getUsers)
       .post(upload.single("image"), this.controller.createUser);
-    this.router.route(`${this.path}/org/:orgId`).get(this.controller.getUsersByWorkspace);
     this.router.route(`${this.path}/email/:email`).get(this.controller.getUserByEmail);
     this.router
       .route(`${this.path}/:id`)

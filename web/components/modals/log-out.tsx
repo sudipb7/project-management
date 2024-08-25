@@ -1,4 +1,6 @@
 import React from "react";
+import { toast } from "sonner";
+import { signOut } from "next-auth/react";
 
 import {
   Dialog,
@@ -8,9 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useModal } from "@/components/providers/modal-provider";
 import { Button } from "@/components/ui/button";
-import { signOut } from "next-auth/react";
+import { useModal } from "@/components/providers/modal-provider";
 
 export const LogOutModal = () => {
   const { isOpen, onClose, type } = useModal();
@@ -20,8 +21,9 @@ export const LogOutModal = () => {
   const handleLogout = async () => {
     try {
       await signOut({ callbackUrl: "/" });
+      toast.success("Logged out successfully");
     } catch (error) {
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong.");
     } finally {
       onClose();
     }

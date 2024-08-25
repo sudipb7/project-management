@@ -1,6 +1,7 @@
 "use client";
 
 import { z } from "zod";
+import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -43,11 +44,13 @@ export default function Onboarding({ user }: { user: any }) {
         data: { workspace },
       } = await api.post(`/workspaces`, { ...values, adminId: user.id });
       setButtonStatus("success");
+      toast.success("Workspace created successfully");
       setTimeout(() => {
         router.push(`/workspace/${workspace.id}`);
       }, 1000);
     } catch (error) {
       setButtonStatus("failed");
+      toast.error("Something went wrong");
       setTimeout(() => {
         setButtonStatus("idle");
       }, 1000);

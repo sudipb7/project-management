@@ -1,5 +1,6 @@
 import React from "react";
 import { z } from "zod";
+import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -55,11 +56,11 @@ export const CreateWorkpspaceModal = () => {
         data: { workspace },
       } = await api.post(`/workspaces`, { ...values, adminId });
 
+      toast.success("Workspace created successfully");
       router.push(`/workspace/${workspace.id}`);
       router.refresh();
     } catch (error: any) {
-      alert(error?.message || "Failed to create workspace. Please try again.");
-      console.error("Failed to create workspace", error);
+      toast.error("Failed to create workspace.");
     } finally {
       onModalClose();
     }

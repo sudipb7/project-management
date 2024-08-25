@@ -1,6 +1,5 @@
 import { v4 as uuid } from "uuid";
 import { RequestHandler } from "express";
-import { MemberRole } from "@prisma/client";
 
 import { UserSchema } from "../lib/schemas";
 import { AWS_URL_PREFIX } from "../lib/config";
@@ -68,35 +67,6 @@ class UserController {
       }
 
       return res.status(200).json({ message: "User fetched successfully", user });
-    } catch (error) {
-      console.log(JSON.stringify(error));
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  };
-
-  public getUsersByWorkspace: RequestHandler = async (req, res) => {
-    try {
-      const page = parseInt(req.query.page as string) || 1;
-      const take = parseInt(req.query.take as string) || 10;
-      const skip = (page - 1) * take;
-      const workspaceId = req.params.id;
-      const isAdmin = req.query.isAdmin === "true";
-      let where = {};
-
-      if (workspaceId) {
-        where = { members: { some: { workspaceId } } };
-      }
-
-      if (isAdmin) {
-        where = { members: { some: { workspaceId }, role: MemberRole.ADMIN } };
-      }
-
-      const count = await this.userService.getUserCount(where);
-      const users = await this.userService.getUsers(take, skip, where);
-
-      const isNext = count > page * take;
-
-      return res.status(200).json({ message: "Users fetched successfully", users, count, isNext });
     } catch (error) {
       console.log(JSON.stringify(error));
       return res.status(500).json({ message: "Internal server error" });
