@@ -1,43 +1,55 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { LogOutModal } from '@/components/modals/log-out';
-import { DeleteWorkpspaceModal } from '@/components/modals/delete-workspace';
-import { CreateWorkpspaceModal } from '@/components/modals/create-workspace';
+import * as React from "react";
+import { Profile } from "@prisma/client";
 
-export type ModalType = 'logout' | 'create-workspace' | 'delete-workspace';
+import { DeleteWorkpspaceModal } from "@/components/modals/delete-workspace";
+import { CreateWorkpspaceModal } from "@/components/modals/create-workspace";
+
+export type ModalType = "create-workspace" | "delete-workspace" | "onboarding";
+
+export type ModalData = {
+  profile?: Profile;
+};
 
 export type ModalState = {
   isOpen: boolean;
   type: ModalType | null;
-  onOpen: (type: ModalType) => void;
+  data: ModalData | null;
+  onOpen: (type: ModalType, data?: ModalData) => void;
   onClose: () => void;
 };
 
 export const ModalContext = React.createContext<ModalState>({
   isOpen: false,
   type: null,
+  data: null,
   onOpen: () => {},
   onClose: () => {},
 });
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [data, setData] = React.useState<ModalData | null>(null);
   const [type, setType] = React.useState<ModalType | null>(null);
 
-  const onOpen = React.useCallback((type: ModalType) => {
+  const onOpen = React.useCallback((type: ModalType, data?: ModalData) => {
+    if (data) {
+      setData(data);
+    }
     setType(type);
     setIsOpen(true);
   }, []);
 
   const onClose = React.useCallback(() => {
     setType(null);
+    setData(null);
     setIsOpen(false);
   }, []);
 
   const value = React.useMemo(
-    () => ({ isOpen, type, onOpen, onClose }),
-    [isOpen, onClose, onOpen, type]
+    () => ({ isOpen, type, onOpen, onClose, data }),
+    [isOpen, onClose, onOpen, type, data]
   );
 
   return (
@@ -51,7 +63,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 export function useModal() {
   const context = React.useContext(ModalContext);
   if (!context) {
-    throw new Error('useModal must be used within a ModalProvider');
+    throw new Error("useModal must be used within a ModalProvider");
   }
   return context;
 }
@@ -69,7 +81,6 @@ function Modals() {
 
   return (
     <>
-      <LogOutModal />
       <CreateWorkpspaceModal />
       <DeleteWorkpspaceModal />
     </>

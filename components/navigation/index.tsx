@@ -1,36 +1,41 @@
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
-import { SideNavigationList } from './navigation-list';
-import { SideNavigationHeader } from './navigation-header';
-import { currentUser, getUserWorkspaces } from '@/lib/api';
-import { UserDropdownMenu } from '../user-dropdown-menu';
+import { SideNavigationList } from "./navigation-list";
+import { SideNavigationHeader } from "./navigation-header";
+import { currentProfile } from "@/lib/profile";
+import { ProfileDropdownMenu } from "@/components/profile-dropdown-menu";
+import { WorkspaceWithMembers } from "@/types";
+import { getWorkspacesByProfileId } from "@/lib/workspace";
+import { ComboboxItem } from "@/components/ui/combobox";
 
 export default async function SideNavigation() {
-  const user = await currentUser();
-  if (!user) {
-    return redirect('/sign-in');
+  const profile = await currentProfile();
+  if (!profile) {
+    return redirect("/sign-in");
   }
 
-  const workspaces = await getUserWorkspaces(user.id, { includeMembers: true });
+  const workspaces = (await getWorkspacesByProfileId(profile.id, {
+    includeMembers: true,
+  })) as WorkspaceWithMembers[];
   if (!workspaces) {
-    return redirect('/sign-in');
+    return redirect("/sign-in");
   }
 
-  const comboboxData = workspaces.map((workspace: any) => ({
+  const comboboxData = workspaces.map((workspace) => ({
     value: workspace.id,
     label: workspace.name,
     ...workspace,
   }));
 
   return (
-    <div className='border-r bg-background hidden md:block w-64 fixed inset-y-0 left-0 z-30 pb-3'>
-      <div className='flex h-full max-h-screen flex-col gap-2'>
-        <SideNavigationHeader data={comboboxData} />
-        <div className='flex-1'>
-          <SideNavigationList user={user} workspaces={workspaces} />
+    <div className="border-r bg-background hidden md:block w-64 fixed inset-y-0 left-0 z-30 pb-3">
+      <div className="flex h-full max-h-screen flex-col gap-2">
+        <SideNavigationHeader data={comboboxData as unknown as ComboboxItem[]} profile={profile} />
+        <div className="flex-1">
+          <SideNavigationList profile={profile} workspaces={workspaces} />
         </div>
-        <div className='px-2'>
-          <UserDropdownMenu user={user} />
+        <div className="px-2">
+          <ProfileDropdownMenu profile={profile} />
         </div>
       </div>
     </div>

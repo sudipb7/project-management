@@ -1,12 +1,14 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { z } from 'zod';
-import { toast } from 'sonner';
-import { Loader } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
+import React from "react";
+import { z } from "zod";
+import { toast } from "sonner";
+import { Loader } from "lucide-react";
+import axios, { AxiosError } from "axios";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { WorkspaceVisibility } from "@prisma/client";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Card,
@@ -15,21 +17,23 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { api } from '@/lib/api';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { type WorkspacePreferencesProps } from '.';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { type WorkspacePreferencesProps } from ".";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 const schema = z.object({
-  name: z.string().min(1, 'Minimum 1 character').max(32, 'Maximum 32 characters'),
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters long" })
+    .max(32, { message: "Name must be at most 32 characters long" }),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 export const WorkspaceDisplayName = ({
-  user,
+  profile,
   isAdmin,
   currentWorkspace,
 }: WorkspacePreferencesProps) => {
@@ -45,17 +49,33 @@ export const WorkspaceDisplayName = ({
 
   const onSubmit = async (values: FormValues) => {
     try {
-      const adminId = user.id;
+      const adminId = profile.id;
       if (!adminId || !isAdmin) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
 
-      await api.patch(`/workspaces/${currentWorkspace.id}`, { ...values, adminId: user.id });
+      const { data: workspace } = await axios.get(`/api/workspaces/${currentWorkspace.id}`);
+      if (!workspace) {
+        throw new Error("Unauthorized");
+      }
 
-      toast.success('Workspace name updated successfully.');
+      const res = await axios.patch(`/api/workspaces/${currentWorkspace.id}`, {
+        ...values,
+        adminId: profile.id,
+        description: workspace.description,
+        image: workspace.image,
+        isPublic: workspace.visibility === WorkspaceVisibility.PUBLIC,
+      });
+      console.log(res);
+
+      toast.success("Workspace name updated successfully.");
       router.refresh();
-    } catch (error) {
-      toast.error('Failed to update workspace name.');
+    } catch (error: AxiosError | any) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data);
+      } else {
+        toast.error(error?.message || "Failed to update workspace name.");
+      }
     }
   };
 
@@ -66,13 +86,13 @@ export const WorkspaceDisplayName = ({
   const isLoading = form.formState.isSubmitting;
 
   return (
-    <Card className='mt-4'>
-      <CardHeader className='space-y-0.5 pb-2'>
-        <CardTitle className='text-sm tracking-[0.01em] font-medium font-mono'>
+    <Card className="mt-4">
+      <CardHeader className="space-y-0.5 pb-2">
+        <CardTitle className="text-sm tracking-[0.01em] font-medium font-mono">
           Workspace Name
         </CardTitle>
-        <CardDescription className='text-[13px]'>
-          This is your workspace&apos;s visible name within ColumnZ. For example, the name of your
+        <CardDescription className="text-[13px]">
+          This is your workspace&apos;s visible name within Mk-1. For example, the name of your
           company or department.
         </CardDescription>
       </CardHeader>
@@ -80,18 +100,18 @@ export const WorkspaceDisplayName = ({
         <Form {...form}>
           <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
-              name='name'
+              name="name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
                       {...field}
-                      type='text'
+                      type="text"
                       readOnly={!isAdmin}
                       disabled={isLoading}
-                      placeholder='Workspace Name'
-                      className='max-w-xs text-[13px] h-9'
+                      placeholder="Workspace Name"
+                      className="max-w-xs text-[13px] h-9"
                     />
                   </FormControl>
                   <FormMessage />
@@ -102,15 +122,15 @@ export const WorkspaceDisplayName = ({
         </Form>
       </CardContent>
       {isAdmin && (
-        <CardFooter className='border-t justify-between py-2 bg-muted/20'>
-          <p className='text-[13px] text-muted-foreground'>Please use 32 characters at maximum.</p>
+        <CardFooter className="border-t justify-between py-2">
+          <p className="text-[13px] text-muted-foreground">Please use 32 characters at maximum.</p>
           <Button
-            size='sm'
+            size="sm"
             onClick={requestSubmit}
-            className='text-[13px] h-8'
-            disabled={isLoading || form.getValues('name') === currentWorkspace.name}
+            className="text-[13px] h-8"
+            disabled={isLoading || form.getValues("name") === currentWorkspace.name}
           >
-            {isLoading ? <Loader className='h-[13px] w-[13px] animate-spin' /> : 'Save'}
+            {isLoading ? <Loader className="h-[13px] w-[13px] animate-spin" /> : "Save"}
           </Button>
         </CardFooter>
       )}

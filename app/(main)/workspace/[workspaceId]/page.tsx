@@ -1,14 +1,22 @@
-import { notFound } from 'next/navigation';
+import { redirect } from "next/navigation";
 
-import { getWorkSpaceById } from '@/lib/api';
+import { currentProfile } from "@/lib/profile";
+import { getWorkspaceById } from "@/lib/workspace";
 
 export default async function WorkspacePage({ params }: { params: { workspaceId: string } }) {
-  const workspace = await getWorkSpaceById(params.workspaceId);
+  const profile = await currentProfile();
+  if (!profile) {
+    return redirect("/sign-in");
+  }
+
+  const workspace = await getWorkspaceById(params.workspaceId, {});
   if (!workspace) {
-    notFound();
+    return <></>;
   }
 
   return (
-    <pre className='whitespace-pre-wrap p-4 text-xs'>{JSON.stringify(workspace, null, 2)}</pre>
+    <pre className="whitespace-pre-wrap text-xs overflow-hidden">
+      {JSON.stringify(workspace, null, 2)}
+    </pre>
   );
 }

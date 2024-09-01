@@ -3,9 +3,14 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: process.env.AWS_BUCKET_HOST,
-        pathname: '/**/*',
+        protocol: "https",
+        hostname: "img.clerk.com",
+        pathname: "/*",
+      },
+      {
+        protocol: "https",
+        hostname: process.env.AWS_S3_BUCKET_HOST,
+        pathname: "/**/*",
       },
     ],
   },

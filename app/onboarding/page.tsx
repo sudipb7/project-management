@@ -1,22 +1,26 @@
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
-import { currentUser, getUserWorkspaces } from '@/lib/api';
-import Onboarding from '@/components/onboarding';
+import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/profile";
+import { Onboarding } from "@/components/modals/onboarding";
 
 export const metadata = {
-  title: 'Onboarding',
+  title: "Onboarding",
 };
 
-export default async function OnboardingPage() {
-  const user = await currentUser();
-  if (!user) {
-    return redirect('/sign-in');
+export default async function OnboardingLayout() {
+  const profile = await currentProfile();
+  if (!profile) {
+    return redirect("/sign-in");
   }
 
-  const userWorkspaces = await getUserWorkspaces(user.id);
-  if (!userWorkspaces) {
-    return redirect('/');
+  const workspace = await db.workspace.findFirst({
+    where: { members: { some: { profileId: profile.id } } },
+  });
+
+  if (workspace) {
+    return redirect(`/workspace/${workspace.id}`);
   }
 
-  return <Onboarding user={user} />;
+  return <Onboarding profile={profile} />;
 }

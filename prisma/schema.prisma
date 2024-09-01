@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  name      String
+  image     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  password  String?
+  userId    String   @unique @map("user_id")
+  email     String   @unique
+  members   Member[]
+
+  @@map("users")
+}
+
+model Member {
+  id          String     @id @default(cuid())
+  profileId   String     @map("user_id")
+  workspaceId String     @map("workspace_id")
+  role        MemberRole @default(MEMBER)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  profile     Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, workspaceId])
+  @@map("members")
+}
+
+model Workspace {
+  id          String              @id @default(cuid())
+  name        String
+  image       String?
+  description String?
+  visibility  WorkspaceVisibility @default(PUBLIC)
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  channels    Channel[]
+  members     Member[]
+
+  @@map("workspaces")
+}
+
+model Channel {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  workspaceId String      @map("workspace_id")
+  type        ChannelType @default(GENERAL)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@map("channels")
+}
+
+enum MemberRole {
+  ADMIN
+  MEMBER
+}
+
+enum WorkspaceVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum ChannelType {
+  GENERAL
+  ANNOUCEMENT
+}
