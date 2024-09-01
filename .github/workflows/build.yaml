@@ -1,0 +1,31 @@
+name: Build on Push and Pull Request
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+      AWS_S3_BUCKET_HOST: ${{ secrets.AWS_S3_BUCKET_HOST }} # This env is used in next.config.js file that's why it's here
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Execute Build
+        run: npm run build
