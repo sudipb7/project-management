@@ -39,7 +39,7 @@ export async function POST(req: Request, { params }: { params: { workspaceId: st
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (existingWorkspace.image) {
+    if (existingWorkspace.image && !existingWorkspace.image.includes("img.clerk.com")) {
       const arr = existingWorkspace.image.split("/");
       const fileKey = arr[3] + "/" + arr[4];
       const deleted = await deleteFileFromS3(fileKey);
@@ -94,7 +94,7 @@ export async function DELETE(req: Request, { params }: { params: { workspaceId: 
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (existingWorkspace.image) {
+    if (existingWorkspace.image && !existingWorkspace.image.includes("img.clerk.com")) {
       const arr = existingWorkspace.image.split("/");
       const fileKey = arr[3] + "/" + arr[4];
       const deleted = await deleteFileFromS3(fileKey);

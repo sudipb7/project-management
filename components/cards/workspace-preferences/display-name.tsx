@@ -59,14 +59,13 @@ export const WorkspaceDisplayName = ({
         throw new Error("Unauthorized");
       }
 
-      const res = await axios.patch(`/api/workspaces/${currentWorkspace.id}`, {
+      await axios.patch(`/api/workspaces/${currentWorkspace.id}`, {
         ...values,
         adminId: profile.id,
         description: workspace.description,
         image: workspace.image,
         isPublic: workspace.visibility === WorkspaceVisibility.PUBLIC,
       });
-      console.log(res);
 
       toast.success("Workspace name updated successfully.");
       router.refresh();

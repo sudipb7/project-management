@@ -5,12 +5,12 @@ import { getWorkspacesByProfileId } from "@/lib/workspace";
 
 export default async function WorkspacePage() {
   const profile = await currentProfile();
-  if (!profile) {
+  if (!profile?.id) {
     return redirect("/sign-in");
   }
 
   const workspaces = await getWorkspacesByProfileId(profile.id, {});
-  if (!workspaces) {
+  if (!workspaces || workspaces.length === 0) {
     return redirect("/onboarding");
   }
 

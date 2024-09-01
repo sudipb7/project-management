@@ -16,6 +16,7 @@ export default function ioHandler(req: NextApiRequest, res: NextApiResponseWithS
     const io = new SocketServer(httpServer, {
       path,
       addTrailingSlash: false,
+      transports: ["websocket", "polling"],
     });
     res.socket.server.io = io;
   }
