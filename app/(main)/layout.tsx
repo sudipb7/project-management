@@ -1,27 +1,22 @@
-import React from 'react';
-import { redirect } from 'next/navigation';
+import React from "react";
+import { redirect } from "next/navigation";
 
-import SideNavigation from '@/components/navigation';
-import { currentUser, getUserWorkspaces } from '@/lib/api';
-import { WorkspaceHeader } from '@/components/workspace-header';
+import SideNavigation from "@/components/navigation";
+import { currentProfile } from "@/lib/profile";
+import { WorkspaceHeader } from "@/components/workspace-header";
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
-  const user = await currentUser();
-  if (!user) {
-    return redirect('/sign-in');
-  }
-
-  const userWorkSpaces = await getUserWorkspaces(user.id);
-  if (!userWorkSpaces) {
-    return redirect('/onboarding');
+  const profile = await currentProfile();
+  if (!profile) {
+    return redirect("/sign-in");
   }
 
   return (
-    <div className='relative'>
+    <div className="relative">
       <SideNavigation />
-      <div className='relative md:pl-64 min-h-screen w-full'>
-        <WorkspaceHeader user={user} />
-        <main className='p-4'>{children}</main>
+      <div className="relative md:pl-64 min-h-screen w-full">
+        <WorkspaceHeader profile={profile} />
+        <main className="p-4">{children}</main>
       </div>
     </div>
   );

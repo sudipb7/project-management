@@ -1,78 +1,82 @@
-'use client';
+"use client";
 
-import React from 'react';
-import NextLink from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
-import { Briefcase, Headphones, Home, MessageCircle, Settings, Users, Link } from 'lucide-react';
+import React from "react";
+import Link from "next/link";
+import { Profile } from "@prisma/client";
+import { useParams, usePathname } from "next/navigation";
+import { Briefcase, Headphones, Home, MessageCircle, Settings, Users } from "lucide-react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
+import { WorkspaceWithMembers } from "@/types";
 
 interface SideNavigationListProps {
-  user: { [key: string]: any };
-  workspaces: { [key: string]: any }[];
+  profile: Profile;
+  workspaces: WorkspaceWithMembers[];
 }
 
-export const SideNavigationList = ({ user, workspaces }: SideNavigationListProps) => {
+export const SideNavigationList = ({ profile, workspaces }: SideNavigationListProps) => {
   const params = useParams();
   const pathname = usePathname();
-  const currentWorkspace = workspaces.find((workspace: any) => workspace.id === params.workspaceId);
+  const currentWorkspace = workspaces.find(
+    (workspace: any) => workspace.id === params?.workspaceId
+  );
 
   const links = [
     {
       href: `/workspace/${currentWorkspace?.id}`,
-      label: 'Home',
+      label: "Home",
       Icon: Home,
     },
     {
       href: `/workspace/${currentWorkspace?.id}/chat`,
-      label: 'Chat',
+      label: "Chat",
       Icon: MessageCircle,
     },
     {
       href: `/workspace/${currentWorkspace?.id}/projects`,
-      label: 'Projects',
+      label: "Projects",
       Icon: Briefcase,
       comingSoon: true,
     },
     {
       href: `/workspace/${currentWorkspace?.id}/members`,
-      label: 'Members',
+      label: "Members",
       Icon: Users,
     },
     {
       href: `/workspace/${currentWorkspace?.id}/huddle`,
-      label: 'Huddle',
+      label: "Huddle",
       Icon: Headphones,
       comingSoon: true,
     },
     {
       href: `/workspace/${currentWorkspace?.id}/preferences`,
-      label: 'Preferences',
+      label: "Preferences",
       Icon: Settings,
     },
   ];
 
   return (
-    <nav className='grid items-start gap-y-1 px-4 text-sm font-medium pt-0.5 transition-all'>
+    <nav className="grid items-start gap-y-1 px-4 text-sm font-medium pt-0.5 transition-all">
       {links.map(({ Icon, href, label, comingSoon }) => {
-        const isActive = label === 'Home' ? pathname === href : pathname.includes(href);
+        const isActive = label === "Home" ? pathname === href : pathname?.includes(href);
         return (
-          <NextLink
+          <Link
             key={href}
             href={href}
             className={cn(
-              'relative flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8 group',
-              isActive ? 'text-primary bg-muted hover:text-primary' : 'text-muted-foreground'
+              "relative flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8 group",
+              isActive ? "text-primary bg-muted hover:text-primary" : "text-muted-foreground"
             )}
           >
-            <Icon className='h-4 w-4 group-hover:animate-jiggle transition-all' />
-            {label}{' '}
+            <Icon className="h-4 w-4 group-hover:animate-jiggle transition-all" />
+            {label}{" "}
             {comingSoon && (
-              <span className='bg-foreground text-background text-[9px] font-mono px-1.5 rounded-full'>
+              <span className="bg-foreground text-background text-[9px] font-mono px-1.5 rounded-full">
                 Coming soon
               </span>
             )}
-          </NextLink>
+          </Link>
         );
       })}
     </nav>

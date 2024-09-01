@@ -1,60 +1,49 @@
-import type { Metadata } from 'next';
-import { Space_Grotesk as FontSans, Space_Mono as FontMono } from 'next/font/google';
+import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { ClerkProvider } from "@clerk/nextjs";
 
-import '@/styles/globals.css';
-import { cn } from '@/lib/utils';
-import { auth } from '@/lib/auth';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from '@/components/providers/theme-provider';
-import { AuthProvider } from '@/components/providers/auth-provider';
-import { ModalProvider } from '@/components/providers/modal-provider';
+import "@/styles/globals.css";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
+import { ModalProvider } from "@/components/providers/modal-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { SocketProvider } from "@/components/providers/socket-provider";
 
 export const metadata: Metadata = {
-  title: 'Columnz',
-  description: 'Project Management made easy.',
+  title: "Mk-1",
 };
 
-const fontSans = FontSans({
-  subsets: ['latin'],
-  variable: '--font-sans',
-});
-
-const fontMono = FontMono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  weight: ['400', '700'],
-});
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
-    <AuthProvider session={session}>
-      <html lang='en' suppressHydrationWarning>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
         <body
           className={cn(
-            'min-h-screen bg-background font-sans antialiased',
-            fontSans.variable,
-            fontMono.variable
+            "min-h-screen bg-background font-sans antialiased",
+            GeistSans.variable,
+            GeistMono.variable
           )}
         >
           <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
+            attribute="class"
+            defaultTheme="light"
             enableSystem
-            storageKey='columnz-theme'
+            storageKey="mk-1-theme"
           >
-            <ModalProvider>
-              {children}
-              <Toaster />
-            </ModalProvider>
+            <SocketProvider>
+              <ModalProvider>
+                {children}
+                <Toaster />
+              </ModalProvider>
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </html>
-    </AuthProvider>
+    </ClerkProvider>
   );
 }

@@ -1,45 +1,30 @@
-export type MemberRole = 'ADMIN' | 'MEMBER';
+import { NextApiResponse } from "next";
+import { Server as NetServer, Socket } from "net";
+import { Server as SocketIOServer } from "socket.io";
+import { Profile, Workspace, Member, MemberRole } from "@prisma/client";
 
-export type User = {
-  id: string;
-  name: string;
-  image: string | null;
-  email: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type Member = {
-  id: string;
-  userId: string;
-  workspaceId: string;
-  role: MemberRole;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type Workspace = {
-  id: string;
-  name: string;
-  image: string | null;
-  description: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type ModifiedMember = {
-  id: string;
-  userId: string;
-  role: MemberRole;
-  createdAt: Date;
-  workspaceId: string;
-  email: string;
-  name: string;
-  image: string | null;
-};
-
-export type MemberWithUser = Member & { user: User };
+export type MemberWithProfile = Member & { profile: Profile };
 
 export type WorkspaceWithMembers = Workspace & { members: Member[] };
 
-export type WorkspaceWithMembersAndUsers = Workspace & { members: MemberWithUser[] };
+export type WorkspaceWithMembersAndProfile = Workspace & { members: MemberWithProfile[] };
+
+export type MemberTable = {
+  id: string;
+  userId: string;
+  profileId: string;
+  role: MemberRole;
+  createdAt: Date;
+  workspaceId: string;
+  email: string;
+  name: string;
+  image: string | null;
+};
+
+export type NextApiResponseWithSocket = NextApiResponse & {
+  socket: Socket & {
+    server: NetServer & {
+      io: SocketIOServer;
+    };
+  };
+};

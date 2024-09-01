@@ -1,13 +1,14 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function buildUrl(url: string, queryObject?: { [key: string]: any }) {
+export function buildUrl(pathUrl: string, queryObject?: { [key: string]: any }) {
+  const hostName = process.env.NEXT_PUBLIC_SITE_URL;
   if (!queryObject) {
-    return url;
+    return hostName + pathUrl;
   }
 
   const queryParams = new URLSearchParams();
@@ -23,5 +24,5 @@ export function buildUrl(url: string, queryObject?: { [key: string]: any }) {
   }
 
   const queryString = queryParams.toString();
-  return queryString ? `${url}?${queryString}` : url;
+  return queryString ? `${hostName}${pathUrl}?${queryString}` : hostName + pathUrl;
 }
