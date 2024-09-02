@@ -12,9 +12,10 @@ import { WorkspaceWithMembers } from "@/types";
 interface SideNavigationListProps {
   profile: Profile;
   workspaces: WorkspaceWithMembers[];
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SideNavigationList = ({ profile, workspaces }: SideNavigationListProps) => {
+export const SideNavigationList = ({ profile, workspaces, setIsOpen }: SideNavigationListProps) => {
   const params = useParams();
   const pathname = usePathname();
   const currentWorkspace = workspaces.find(
@@ -64,6 +65,7 @@ export const SideNavigationList = ({ profile, workspaces }: SideNavigationListPr
           <Link
             key={href}
             href={href}
+            {...(setIsOpen && { onClick: () => setTimeout(() => setIsOpen?.(false), 100) })}
             className={cn(
               "relative flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8 group",
               isActive ? "text-primary bg-muted hover:text-primary" : "text-muted-foreground"

@@ -30,7 +30,7 @@ export const SideNavigationHeader = React.memo(
           onItemClicked={onItemClicked}
           emptyMessage="No workspace found"
           triggerText="Switch workspaces"
-          triggerClasses="text-[13px] w-full"
+          triggerClasses="text-[0.8rem] w-full"
           showPrimaryLogo
           action={{
             actionLabel: "Create",

@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { columns } from "./_components/columns";
+import { DataTable } from "./_components/data-table";
 import { currentProfile } from "@/lib/profile";
 import { getWorkspaceById } from "@/lib/workspace";
 import { MemberTable, WorkspaceWithMembersAndProfile } from "@/types";

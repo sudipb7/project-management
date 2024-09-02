@@ -88,7 +88,7 @@ export const DeleteWorkpspaceModal = () => {
             variant="destructive"
             disabled={isLoading || value !== "delete"}
             size="sm"
-            className="w-full text-[13px] "
+            className="w-full text-[0.8rem] "
           >
             {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
             {isLoading ? "Deleting..." : "Confirm"}

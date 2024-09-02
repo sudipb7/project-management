@@ -43,7 +43,7 @@ export const ProfileDropdownMenu = ({ profile }: { profile: Profile }) => {
             )}
           </span>
           <span className="text-start">
-            <h6 className="text-[13px] font-medium">
+            <h6 className="text-[0.8rem] font-medium">
               {profile.name.length > 20 ? profile.name.slice(0, 20) + "..." : profile.name}
             </h6>
             <p className="text-muted-foreground text-xs">
@@ -54,7 +54,7 @@ export const ProfileDropdownMenu = ({ profile }: { profile: Profile }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top" className="w-60">
         <DropdownMenuLabel className="flex flex-col">
-          <span className="text-[13px] font-medium">
+          <span className="text-[0.8rem] font-medium">
             {profile.name.length > 20 ? profile.name.slice(0, 20) + "..." : profile.name}
           </span>
           <span className="text-xs text-muted-foreground">

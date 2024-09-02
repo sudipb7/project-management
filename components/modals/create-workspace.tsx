@@ -10,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,7 +25,6 @@ import {
 import { useModal } from "@/components/providers/modal-provider";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { WorkspaceSchema } from "@/lib/schema";
 
@@ -116,23 +114,7 @@ export const CreateWorkpspaceModal = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              name="isPublic"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm">Public Workspace</FormLabel>
-                  <FormDescription className="text-xs">
-                    Public workspaces are visible and joinable by anyone.
-                  </FormDescription>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={isLoading} size="sm" className="w-full text-[13px]">
+            <Button type="submit" disabled={isLoading} size="sm" className="w-full text-[0.8rem]">
               {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? "Creating Workspace..." : "Create Workspace"}
             </Button>

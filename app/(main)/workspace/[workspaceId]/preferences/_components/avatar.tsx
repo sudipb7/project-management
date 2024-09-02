@@ -6,7 +6,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { type WorkspacePreferencesProps } from ".";
+import { WorkspacePreferencesProps } from "../page";
 import {
   Card,
   CardContent,
@@ -69,7 +69,7 @@ export const WorkspaceImage = ({
           <CardTitle className="text-sm tracking-[0.01em] font-medium font-mono">
             Workspace Avatar
           </CardTitle>
-          <CardDescription className="text-[13px]">
+          <CardDescription className="text-[0.8rem]">
             This is your workspace&apos;s avatar.
             <br />
             {isAdmin
@@ -98,7 +98,7 @@ export const WorkspaceImage = ({
         </CardContent>
       </div>
       <CardFooter className="border-t py-2">
-        <p className="text-[13px] text-muted-foreground">
+        <p className="text-[0.8rem] text-muted-foreground">
           An avatar is optional but strongly recommended.
         </p>
       </CardFooter>

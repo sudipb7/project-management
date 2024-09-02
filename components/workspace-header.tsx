@@ -6,9 +6,15 @@ import Image from "next/image";
 import { Profile } from "@prisma/client";
 import { useParams } from "next/navigation";
 
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { WorkspaceWithMembers } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SideNavigationList } from "./navigation/navigation-list";
 import { ProfileDropdownMenu } from "./profile-dropdown-menu";
 import { SideNavigationHeader } from "./navigation/navigation-header";
@@ -77,10 +83,18 @@ export const WorkspaceHeader = ({ profile }: { profile: Profile }) => {
       </header>
       {comboboxData?.length > 0 && (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="left" className="w-64 px-0 pb-3 pt-10 flex flex-col gap-2">
+          <SheetContent
+            hideCloseBtn
+            side="left"
+            className="w-64 px-0 pb-2.5 pt-0.5 flex flex-col gap-2"
+          >
+            <SheetHeader className="sr-only">
+              <SheetTitle>Workspace Navigation</SheetTitle>
+              <SheetDescription>Select a workspace to navigate</SheetDescription>
+            </SheetHeader>
             <SideNavigationHeader data={comboboxData} profile={profile} />
             <div className="flex-1">
-              <SideNavigationList profile={profile} workspaces={workspaces} />
+              <SideNavigationList setIsOpen={setIsOpen} profile={profile} workspaces={workspaces} />
             </div>
             <div className="px-2">
               <ProfileDropdownMenu profile={profile} />

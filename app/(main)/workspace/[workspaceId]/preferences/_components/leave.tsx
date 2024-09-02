@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Button } from "@/components/ui/button";
-import { type WorkspacePreferencesProps } from ".";
+import { WorkspacePreferencesProps } from "../page";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const WorkspaceLeave = ({ isAdmin, admins }: WorkspacePreferencesProps) => {
@@ -11,22 +11,22 @@ export const WorkspaceLeave = ({ isAdmin, admins }: WorkspacePreferencesProps) =
         <CardTitle className="text-sm tracking-[0.01em] font-medium font-mono">
           Leave Workspace
         </CardTitle>
-        <CardDescription className="text-[13px]">
+        <CardDescription className="text-[0.8rem]">
           Revoke your access to this Workspace. Any resources you&apos;ve added to the Workspace
           will remain.
         </CardDescription>
       </CardHeader>
       <CardFooter className="border-t py-2 justify-between">
         {isAdmin && admins.length === 1 ? (
-          <p className="text-[13px] text-muted-foreground">
+          <p className="text-[0.8rem] text-muted-foreground">
             To leave this Workspace, ensure at least one more Member has the Admin role.
           </p>
         ) : (
           <>
-            <p className="text-[13px] text-muted-foreground">
+            <p className="text-[0.8rem] text-muted-foreground">
               You can rejoin this Workspace at any time.
             </p>
-            <Button size="sm" className="text-[13px] h-8">
+            <Button size="sm" className="text-[0.8rem] h-8">
               Leave
             </Button>
           </>

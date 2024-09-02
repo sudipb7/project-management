@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           placeholder="Filter members..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
-          className="max-w-sm text-[13px] h-9 px-2.5"
+          className="max-w-sm text-[0.8rem] h-9 px-2.5"
         />
       </div>
       <div className="rounded-md border">
@@ -96,9 +96,15 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </Table>
       </div>
       <div className="flex items-center justify-between pt-3">
-        <div className="flex-1 text-[13px] text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+        <div className="flex-1 text-[0.8rem] text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length > 0 ? (
+            <>
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} member(s) selected.
+            </>
+          ) : (
+            <>{table.getFilteredRowModel().rows.length} member(s) found.</>
+          )}
         </div>
         <div className="space-x-2">
           <Button
@@ -106,7 +112,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="h-8 text-[13px]"
+            className="h-8 text-[0.8rem]"
           >
             Previous
           </Button>
@@ -115,7 +121,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="h-8 text-[13px]"
+            className="h-8 text-[0.8rem]"
           >
             Next
           </Button>

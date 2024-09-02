@@ -71,3 +71,29 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+/* Styling Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted));
+}
+
+@media (max-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 4.5px;
+    height: 4.5px;
+  }
+}
