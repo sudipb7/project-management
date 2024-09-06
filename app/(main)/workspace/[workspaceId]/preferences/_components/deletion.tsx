@@ -7,38 +7,34 @@ import { Button } from "@/components/ui/button";
 import { WorkspacePreferencesProps } from "../page";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const WorkspaceDeletion = ({ isAdmin, workspaces, profile }: WorkspacePreferencesProps) => {
+export const WorkspaceDeletion = ({
+  profile,
+  workspaces,
+  currentWorkspace,
+}: WorkspacePreferencesProps) => {
   const { onOpen } = useModal();
 
   return (
-    <>
-      {isAdmin && workspaces.length === 1 && (
-        <Card className="mt-4 bg-destructive/85 dark:bg-destructive/20 border-destructive/50">
-          <CardHeader className="space-y-0.5 py-3">
-            <CardTitle className="text-sm tracking-[0.01em] font-medium font-mono text-white">
-              You are about to delete your last workspace
-            </CardTitle>
-            <CardDescription className="text-[0.8rem] text-secondary dark:text-muted-foreground">
-              You can&apos;t delete your last workspace. Please create a new workspace before
-              deleting
-            </CardDescription>
-          </CardHeader>
-        </Card>
+    <Card className="mt-4 bg-destructive/15 border-destructive/30 shadow-red-300">
+      {workspaces.length === 1 && (
+        <CardHeader className="space-y-0.5 py-3">
+          <CardTitle className="text-sm tracking-[0.01em] font-medium font-mono text-destructive">
+            You can&apos;t delete your last workspace. Please create a new workspace before deleting
+          </CardTitle>
+        </CardHeader>
       )}
-      {isAdmin && workspaces.length > 1 && (
-        <Card className="mt-4 bg-destructive/85 dark:bg-destructive/20 border-destructive/50">
+      {workspaces.length > 1 && (
+        <>
           <CardHeader className="space-y-0.5 py-3">
-            <CardTitle className="text-white text-sm tracking-[0.01em] font-medium font-mono">
-              Delete Workspace
+            <CardTitle className="text-destructive text-sm tracking-[0.01em] font-medium font-mono">
+              Delete {currentWorkspace?.name}
             </CardTitle>
-            <CardDescription className="text-[0.8rem] text-secondary dark:text-muted-foreground">
+            <CardDescription className="text-[0.8rem] text-muted-foreground">
               Deleting this workspace will remove all data and cannot be undone. Please be careful.
             </CardDescription>
           </CardHeader>
-          <CardFooter className="border-t bg-white/15 border-destructive/50 dark:bg-destructive/40 justify-between py-2">
-            <p className="text-[0.8rem] text-secondary dark:text-muted-foreground">
-              This action cannot be undone.
-            </p>
+          <CardFooter className="border-t border-destructive/30 bg-destructive/15 justify-between py-2">
+            <p className="text-[0.8rem] text-muted-foreground">This action cannot be undone.</p>
             <Button
               onClick={() => onOpen("delete-workspace", { profile })}
               size="sm"
@@ -48,8 +44,8 @@ export const WorkspaceDeletion = ({ isAdmin, workspaces, profile }: WorkspacePre
               Delete
             </Button>
           </CardFooter>
-        </Card>
+        </>
       )}
-    </>
+    </Card>
   );
 };

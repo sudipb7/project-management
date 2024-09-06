@@ -67,8 +67,8 @@ export const SideNavigationList = ({ profile, workspaces, setIsOpen }: SideNavig
             href={href}
             {...(setIsOpen && { onClick: () => setTimeout(() => setIsOpen?.(false), 100) })}
             className={cn(
-              "relative flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8 group",
-              isActive ? "text-primary bg-muted hover:text-primary" : "text-muted-foreground"
+              "relative flex items-center gap-3 rounded-lg px-3 py-2 transition-all h-8 group",
+              isActive ? "text-primary bg-muted" : "text-muted-foreground"
             )}
           >
             <Icon className="h-4 w-4 group-hover:animate-jiggle transition-all" />

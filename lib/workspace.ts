@@ -1,20 +1,32 @@
+import { Workspace } from "@prisma/client";
+
 import { db } from "./db";
+import { WorkspaceWithMembers, WorkspaceWithMembersAndProfile } from "@/types";
 
-// API Routes for these methods are available but still we need these here
-// to be used while fetching data in server side rendering.
-// Fetching data by API routes in server side rendering is not working as expected.
-// So, we need these methods to fetch data in server side rendering.
+// * API Routes for these methods are available but still we need these here
+// * to be used while fetching data in server side rendering.
+// * Fetching data by API routes in server side rendering is not working as expected.
+// * So, we need these methods to fetch data in server side rendering.
 
-type GetWorkspaceIncludeOptions = {
+export type GetWorkspaceIncludeOptions = {
   includeMembers?: boolean;
   includeChannels?: boolean;
   includeProfile?: boolean;
 };
 
+export type GetWorkspaceReturn =
+  | Workspace
+  | WorkspaceWithMembers
+  | WorkspaceWithMembersAndProfile
+  | null;
+export type GetWorkspacesReturn =
+  | (Workspace | WorkspaceWithMembers | WorkspaceWithMembersAndProfile)[]
+  | null;
+
 export const getWorkspacesByProfileId = async (
   profileId: string,
   options: GetWorkspaceIncludeOptions
-) => {
+): Promise<GetWorkspacesReturn> => {
   try {
     const includeProfile = options.includeProfile;
     const includeMembers = options.includeMembers;
@@ -56,7 +68,7 @@ export const getWorkspacesByProfileId = async (
 export const getWorkspaceById = async (
   workspaceId: string,
   options: GetWorkspaceIncludeOptions
-) => {
+): Promise<GetWorkspaceReturn> => {
   try {
     const includeProfile = options.includeProfile;
     const includeMembers = options.includeMembers;

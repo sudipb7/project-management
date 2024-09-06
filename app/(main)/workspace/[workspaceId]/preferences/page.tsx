@@ -66,7 +66,7 @@ export default async function WorkspacePreferencesPage({ params }: WorkspacePref
         <WorkspaceDescription {...props} />
         <WorkspaceImage {...props} />
         <WorkspaceLeave {...props} />
-        <WorkspaceDeletion {...props} />
+        {isAdmin && <WorkspaceDeletion {...props} />}
       </div>
     </div>
   );

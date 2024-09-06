@@ -8,28 +8,35 @@ datasource db {
 }
 
 model Profile {
-  id        String   @id @default(cuid())
-  name      String
-  image     String?
+  id       String  @id @default(cuid())
+  name     String
+  image    String?
+  password String?
+  userId   String  @unique @map("user_id")
+  email    String  @unique
+
+  members Member[]
+  invites Invite[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  password  String?
-  userId    String   @unique @map("user_id")
-  email     String   @unique
-  members   Member[]
 
   @@map("users")
 }
 
 model Member {
   id          String     @id @default(cuid())
+  role        MemberRole @default(MEMBER)
   profileId   String     @map("user_id")
   workspaceId String     @map("workspace_id")
-  role        MemberRole @default(MEMBER)
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @updatedAt @map("updated_at")
-  profile     Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  invites Invite[]
+
+  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([profileId, workspaceId])
   @@map("members")
@@ -41,10 +48,13 @@ model Workspace {
   image       String?
   description String?
   visibility  WorkspaceVisibility @default(PUBLIC)
-  createdAt   DateTime            @default(now()) @map("created_at")
-  updatedAt   DateTime            @updatedAt @map("updated_at")
-  channels    Channel[]
-  members     Member[]
+
+  channels Channel[]
+  members  Member[]
+  invites  Invite[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("workspaces")
 }
@@ -55,12 +65,35 @@ model Channel {
   description String
   workspaceId String      @map("workspace_id")
   type        ChannelType @default(GENERAL)
-  createdAt   DateTime    @default(now()) @map("created_at")
-  updatedAt   DateTime    @updatedAt @map("updated_at")
-  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([workspaceId])
   @@map("channels")
+}
+
+model Invite {
+  id          String       @id @default(cuid())
+  profileId   String       @map("profile_id")
+  memberId    String       @map("member_id")
+  workspaceId String       @map("workspace_id")
+  code        String       @unique
+  status      InviteStatus @default(PENDING)
+
+  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  member    Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([profileId])
+  @@index([memberId])
+  @@index([workspaceId])
+  @@map("invites")
 }
 
 enum MemberRole {
@@ -76,4 +109,10 @@ enum WorkspaceVisibility {
 enum ChannelType {
   GENERAL
   ANNOUCEMENT
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }

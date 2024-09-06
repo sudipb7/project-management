@@ -36,7 +36,7 @@ export const columns: ColumnDef<MemberTable>[] = [
     cell({ row }) {
       return (
         <div className="flex items-center gap-x-2">
-          <div className="relative overflow-hidden rounded-full h-[25px] w-[25px] flex-1">
+          <div className="relative overflow-hidden rounded-full h-[25px] w-[25px]">
             {row.original.image ? (
               <Image
                 src={row.original.image}
@@ -50,7 +50,7 @@ export const columns: ColumnDef<MemberTable>[] = [
               </span>
             )}
           </div>
-          <span className="flex-1">{row.original.name}</span>
+          <span>{row.original.name}</span>
         </div>
       );
     },

@@ -91,7 +91,7 @@ export const DeleteWorkpspaceModal = () => {
             className="w-full text-[0.8rem] "
           >
             {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-            {isLoading ? "Deleting..." : "Confirm"}
+            {isLoading ? "Deleting" : "Confirm"}
           </Button>
         </form>
       </DialogContent>

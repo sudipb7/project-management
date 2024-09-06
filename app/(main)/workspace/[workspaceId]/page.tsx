@@ -1,7 +1,8 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { currentProfile } from "@/lib/profile";
 import { getWorkspaceById } from "@/lib/workspace";
+import { WorkspaceWithMembers } from "@/types";
 
 export default async function WorkspacePage({ params }: { params: { workspaceId: string } }) {
   const profile = await currentProfile();
@@ -9,9 +10,11 @@ export default async function WorkspacePage({ params }: { params: { workspaceId:
     return redirect("/sign-in");
   }
 
-  const workspace = await getWorkspaceById(params.workspaceId, {});
-  if (!workspace) {
-    return <></>;
+  const workspace = (await getWorkspaceById(params.workspaceId, {
+    includeMembers: true,
+  })) as WorkspaceWithMembers;
+  if (!workspace || !workspace?.members.some((member) => member.profileId === profile.id)) {
+    return notFound();
   }
 
   return (
