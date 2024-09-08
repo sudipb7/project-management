@@ -24,34 +24,34 @@ export const SideNavigationList = ({ profile, workspaces, setIsOpen }: SideNavig
 
   const links = [
     {
-      href: `/workspace/${currentWorkspace?.id}`,
+      href: `/workspaces/${currentWorkspace?.id}`,
       label: "Home",
       Icon: Home,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/chat`,
+      href: `/workspaces/${currentWorkspace?.id}/chat`,
       label: "Chat",
       Icon: MessageCircle,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/projects`,
+      href: `/workspaces/${currentWorkspace?.id}/projects`,
       label: "Projects",
       Icon: Briefcase,
       comingSoon: true,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/members`,
+      href: `/workspaces/${currentWorkspace?.id}/members`,
       label: "Members",
       Icon: Users,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/huddle`,
+      href: `/workspaces/${currentWorkspace?.id}/huddle`,
       label: "Huddle",
       Icon: Headphones,
       comingSoon: true,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/preferences`,
+      href: `/workspaces/${currentWorkspace?.id}/preferences`,
       label: "Preferences",
       Icon: Settings,
     },

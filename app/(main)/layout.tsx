@@ -2,7 +2,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 
 import SideNavigation from "@/components/navigation";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 import { WorkspaceHeader } from "@/components/workspace-header";
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {

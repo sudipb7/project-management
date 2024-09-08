@@ -23,7 +23,7 @@ export const SideNavigationHeader = ({
 
   const onItemClicked = (currentValue: string) => {
     if (currentValue === workspaceId) return;
-    router.push(`/workspace/${currentValue}`);
+    router.push(`/workspaces/${currentValue}`);
   };
 
   return (
@@ -35,7 +35,7 @@ export const SideNavigationHeader = ({
         onItemClicked={onItemClicked}
         emptyMessage="No workspace found"
         triggerText="Switch workspaces"
-        triggerClasses="text-[0.8rem] w-full"
+        triggerClasses="text-[0.8rem] mx-auto"
         showPrimaryLogo
         action={{
           actionLabel: "Create",

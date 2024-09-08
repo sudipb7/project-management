@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 import { Onboarding } from "@/components/modals/onboarding";
 
 export const metadata = {
@@ -19,7 +19,7 @@ export default async function OnboardingLayout() {
   });
 
   if (workspace) {
-    return redirect(`/workspace/${workspace.id}`);
+    return redirect(`/workspaces/${workspace.id}`);
   }
 
   return <Onboarding profile={profile} />;

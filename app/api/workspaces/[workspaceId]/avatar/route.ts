@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { MemberRole } from "@prisma/client";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 import { deleteFileFromS3, uploadFileToS3 } from "@/lib/s3";
 
 export async function POST(req: Request, { params }: { params: { workspaceId: string } }) {

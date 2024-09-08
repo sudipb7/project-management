@@ -80,7 +80,7 @@ export const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-[210px] justify-between px-2.5", triggerClasses)}
+          className={cn("w-[220px] justify-between px-2.5", triggerClasses)}
         >
           <div className="flex items-center gap-2.5">
             {showPrimaryLogo && currentValue && (
@@ -104,7 +104,7 @@ export const Combobox = ({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[210px] p-0">
+      <PopoverContent className="w-[220px] p-0">
         <Command>
           {!hideSearch && <CommandInput placeholder={searchPlaceholder} />}
           <CommandList>

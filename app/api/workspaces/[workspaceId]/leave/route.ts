@@ -2,7 +2,7 @@ import { MemberRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 
 export async function DELETE(req: NextRequest, { params }: { params: { workspaceId: string } }) {
   try {

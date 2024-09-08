@@ -2,10 +2,10 @@ import { redirect } from "next/navigation";
 
 import { SideNavigationList } from "./navigation-list";
 import { SideNavigationHeader } from "./navigation-header";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 import { ProfileDropdownMenu } from "@/components/profile-dropdown-menu";
 import { WorkspaceWithMembers } from "@/types";
-import { getWorkspacesByProfileId } from "@/lib/workspace";
+import { getWorkspacesByProfileId } from "@/lib/queries";
 import { ComboboxItem } from "@/components/ui/combobox";
 
 export default async function SideNavigation() {

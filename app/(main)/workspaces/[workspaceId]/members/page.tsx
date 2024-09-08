@@ -1,10 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 
-import { currentProfile } from "@/lib/profile";
-import { getWorkspaceById } from "@/lib/workspace";
-import { columns } from "./_components/columns";
-import { DataTable } from "./_components/data-table";
-import { InviteMembers } from "./_components/invite-members";
+import { currentProfile } from "@/lib/queries";
+import { getWorkspaceById } from "@/lib/queries";
+import { columns, DataTable, InvitePeople } from "./_components";
 import { MemberTable, WorkspaceWithMembersAndProfile } from "@/types";
 
 export default async function WorkspaceMembersPage({
@@ -24,12 +22,12 @@ export default async function WorkspaceMembersPage({
     return notFound();
   }
 
-  const member = workspace.members.find((member) => member.profileId === profile.id);
+  const currentMember = workspace.members.find((member) => member.profileId === profile.id);
   const isAdmin = workspace.members.some(
     (member) => member.profileId === profile.id && member.role === "ADMIN"
   );
 
-  if (!member) {
+  if (!currentMember) {
     return notFound();
   }
 
@@ -44,12 +42,13 @@ export default async function WorkspaceMembersPage({
     image: member.profile.image,
   })) as MemberTable[];
 
-  const showInvite = workspace.visibility === "PUBLIC" || isAdmin;
-
   return (
-    <div className="mx-auto w-full max-w-xl lg:max-w-2xl xl:max-w-4xl flex-1 pb-4 pt-2 space-y-6">
-      {showInvite && <InviteMembers workspaceId={workspace.id} currentMemberId={member.id} />}
-      <DataTable columns={columns} data={modifiedMembers} />
+    <div className="mx-auto w-full max-w-xl lg:max-w-2xl xl:max-w-4xl flex-1 pb-4 pt-2 space-y-4">
+      <h1 className="text-lg md:text-xl font-bold tracking-wide">{workspace.name} - Members</h1>
+      <div className="space-y-6">
+        {isAdmin && <InvitePeople workspaceId={workspace.id} currentMemberId={currentMember.id} />}
+        <DataTable columns={columns} data={modifiedMembers} />
+      </div>
     </div>
   );
 }

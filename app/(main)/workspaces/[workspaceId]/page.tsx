@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
-import { currentProfile } from "@/lib/profile";
-import { getWorkspaceById } from "@/lib/workspace";
+import { currentProfile } from "@/lib/queries";
+import { getWorkspaceById } from "@/lib/queries";
 import { WorkspaceWithMembers } from "@/types";
 
 export default async function WorkspacePage({ params }: { params: { workspaceId: string } }) {

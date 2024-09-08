@@ -11,8 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface InviteMembersProps {
   workspaceId: string;
@@ -25,7 +25,7 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export const InviteMembers = ({ workspaceId, currentMemberId }: InviteMembersProps) => {
+export const InvitePeople = ({ workspaceId, currentMemberId }: InviteMembersProps) => {
   const router = useRouter();
 
   const form = useForm<FormValues>({
@@ -58,7 +58,10 @@ export const InviteMembers = ({ workspaceId, currentMemberId }: InviteMembersPro
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-bold font-mono">Invite Members</CardTitle>
+        <CardTitle className="font-bold font-mono">Invite</CardTitle>
+        <CardDescription className="text-[0.8rem]">
+          Invite members to your workspace by entering their email address.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

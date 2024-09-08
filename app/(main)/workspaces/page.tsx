@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-import { currentProfile } from "@/lib/profile";
-import { getWorkspacesByProfileId } from "@/lib/workspace";
+import { currentProfile } from "@/lib/queries";
+import { getWorkspacesByProfileId } from "@/lib/queries";
 
 export default async function WorkspacePage() {
   const profile = await currentProfile();
@@ -14,5 +14,5 @@ export default async function WorkspacePage() {
     return redirect("/onboarding");
   }
 
-  return redirect(`/workspace/${workspaces[0].id}`);
+  return redirect(`/workspaces/${workspaces[0].id}`);
 }

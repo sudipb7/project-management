@@ -57,7 +57,7 @@ export const Onboarding = ({ profile }: { profile: Profile }) => {
       const { data: workspace } = await axios.post("/api/workspaces", body);
 
       toast.success("Workspace created successfully");
-      router.push(`/workspace/${workspace.id}`);
+      router.push(`/workspaces/${workspace.id}`);
       router.refresh();
     } catch (error: AxiosError | any) {
       if (error instanceof AxiosError) {

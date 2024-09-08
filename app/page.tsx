@@ -2,14 +2,14 @@ import React from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { initialProfile } from "@/lib/profile";
+import { initialProfile } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 
 export default async function Page() {
   const profile = await initialProfile();
 
   if (profile) {
-    return redirect("/workspace");
+    return redirect("/workspaces");
   }
 
   return (

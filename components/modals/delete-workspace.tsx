@@ -44,7 +44,7 @@ export const DeleteWorkpspaceModal = () => {
       });
 
       toast.success("Workspace deleted successfully");
-      router.push("/workspace");
+      router.push("/workspaces");
       router.refresh();
     } catch (error: AxiosError | any) {
       if (error instanceof AxiosError) {

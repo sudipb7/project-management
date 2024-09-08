@@ -1,72 +1,12 @@
 import { v4 as uuid } from "uuid";
-import { Invite, InviteStatus } from "@prisma/client";
+import { Invite, InviteStatus, MemberRole, Workspace } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 import { WorkspaceInviteMail } from "@/components/mails/workspace-invite";
-
-const PENDING_INVITE_COOLDOWN = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
-const REJECTED_INVITE_COOLDOWN = 14 * 24 * 60 * 60 * 1000; // 14 days in milliseconds
-
-export async function GET(req: NextRequest) {
-  try {
-    const searchParams = req.nextUrl.searchParams;
-    const code = searchParams.get("code");
-
-    const profile = await currentProfile();
-    if (!profile) {
-      return NextResponse.redirect(new URL("/sign-in", req.nextUrl.origin));
-    }
-
-    if (!code) {
-      return NextResponse.redirect(req.nextUrl.origin);
-    }
-
-    const invite = await db.invite.findUnique({
-      where: { code },
-      include: { workspace: true, member: true },
-    });
-
-    if (!invite) {
-      return NextResponse.redirect(req.nextUrl.origin);
-    }
-
-    if (invite.profileId !== profile.id) {
-      return NextResponse.redirect(req.nextUrl.origin);
-    }
-
-    if (invite.status !== InviteStatus.PENDING) {
-      return NextResponse.redirect(req.nextUrl.origin);
-    }
-
-    const updatedWorkspace = await db.workspace.update({
-      where: { id: invite.workspaceId },
-      data: {
-        members: {
-          create: {
-            profileId: invite.profileId,
-          },
-        },
-      },
-    });
-
-    if (!updatedWorkspace) {
-      return NextResponse.redirect(req.nextUrl.origin);
-    }
-
-    await db.invite.update({
-      where: { code },
-      data: { status: InviteStatus.ACCEPTED },
-    });
-
-    return NextResponse.redirect(new URL(`/workspace/${invite.workspaceId}`, req.nextUrl.origin));
-  } catch (error) {
-    console.error("[Method: GET, Path: /api/invites]", error);
-    return NextResponse.redirect(req.nextUrl.origin);
-  }
-}
+import { PENDING_INVITE_COOLDOWN, REJECTED_INVITE_COOLDOWN } from "@/lib/constants";
 
 export async function POST(req: NextRequest) {
   try {
@@ -81,11 +21,17 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
-    const member = await db.member.findUnique({
-      where: { id: memberId },
-      include: { workspace: true },
+    const workspace = await db.workspace.findFirst({
+      where: { id: workspaceId, members: { some: { id: memberId, role: MemberRole.ADMIN } } },
+      include: { members: { include: { profile: true } } },
     });
-    if (!member || member.profileId !== profile.id) {
+
+    if (!workspace) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const currentMember = workspace.members.find((member) => member.profileId === profile.id);
+    if (!currentMember) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -99,7 +45,18 @@ export async function POST(req: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    const canSendInvite = await canSendInviteToMember(existingInvites, memberId);
+    const isUserAlreadyInWorkspace = workspace.members.some(
+      (member) => member.profile.email === email
+    );
+    if (isUserAlreadyInWorkspace) {
+      return new NextResponse("User is already in the workspace", { status: 409 });
+    }
+
+    const canSendInvite = await canSendInviteToMember(
+      existingInvites,
+      memberId,
+      isUserAlreadyInWorkspace
+    );
 
     if (canSendInvite === true) {
       const invite = await createInvite(userProfile.id, workspaceId, memberId);
@@ -110,13 +67,13 @@ export async function POST(req: NextRequest) {
       const MailBody = WorkspaceInviteMail({
         invitedBy: { name: profile.name, email: profile.email },
         sendTo: { name: userProfile.name, email: userProfile.email },
-        workspaceName: member.workspace.name,
-        inviteLink: `${process.env.NEXT_PUBLIC_SITE_URL}/api/invites?code=${invite.code}`,
+        workspaceName: currentMember.profile.name,
+        inviteLink: `${req.nextUrl.origin}/invites?code=${invite.code}`,
       });
 
       await sendMail(
         userProfile.email,
-        `${profile.name} invited you to join ${member.workspace.name}`,
+        `${profile.name} invited you to join ${workspace.name}`,
         MailBody
       );
 
@@ -134,7 +91,8 @@ export async function POST(req: NextRequest) {
 
 async function canSendInviteToMember(
   existingInvites: Invite[],
-  memberId: string
+  memberId: string,
+  isUserAlreadyInWorkspace: boolean
 ): Promise<boolean | string> {
   const memberInvites = existingInvites.filter((invite) => invite.memberId === memberId);
 
@@ -151,7 +109,7 @@ async function canSendInviteToMember(
         ? true
         : "You cannot send another invite within 7 days";
     case InviteStatus.ACCEPTED:
-      return "Member already joined";
+      return isUserAlreadyInWorkspace ? "Member already joined" : true;
     case InviteStatus.REJECTED:
       return timeSinceLastInvite > REJECTED_INVITE_COOLDOWN
         ? true

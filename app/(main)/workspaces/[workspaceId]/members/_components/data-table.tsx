@@ -14,6 +14,14 @@ import {
 } from "@tanstack/react-table";
 
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Table,
   TableBody,
   TableCell,
@@ -23,7 +31,6 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -54,12 +61,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-bold font-mono">Members</CardTitle>
+        <CardTitle className="font-bold font-mono">Workspace Members</CardTitle>
+        <CardDescription className="text-[0.8rem]">Manage your workspace members</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between pb-3">
           <Input
-            placeholder="Filter members..."
+            placeholder="Search members..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
             className="max-w-sm text-[0.8rem] h-9 px-2.5"

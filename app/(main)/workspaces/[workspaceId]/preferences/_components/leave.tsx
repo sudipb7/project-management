@@ -50,7 +50,7 @@ export const WorkspaceLeave = ({
       });
 
       toast.success("You have left the workspace.");
-      router.push("/workspace");
+      router.push("/workspaces");
 
       router.refresh();
     } catch (error: AxiosError | any) {
