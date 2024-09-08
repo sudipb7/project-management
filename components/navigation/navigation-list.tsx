@@ -24,34 +24,34 @@ export const SideNavigationList = ({ profile, workspaces, setIsOpen }: SideNavig
 
   const links = [
     {
-      href: `/workspace/${currentWorkspace?.id}`,
+      href: `/workspaces/${currentWorkspace?.id}`,
       label: "Home",
       Icon: Home,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/chat`,
+      href: `/workspaces/${currentWorkspace?.id}/chat`,
       label: "Chat",
       Icon: MessageCircle,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/projects`,
+      href: `/workspaces/${currentWorkspace?.id}/projects`,
       label: "Projects",
       Icon: Briefcase,
       comingSoon: true,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/members`,
+      href: `/workspaces/${currentWorkspace?.id}/members`,
       label: "Members",
       Icon: Users,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/huddle`,
+      href: `/workspaces/${currentWorkspace?.id}/huddle`,
       label: "Huddle",
       Icon: Headphones,
       comingSoon: true,
     },
     {
-      href: `/workspace/${currentWorkspace?.id}/preferences`,
+      href: `/workspaces/${currentWorkspace?.id}/preferences`,
       label: "Preferences",
       Icon: Settings,
     },
@@ -67,8 +67,8 @@ export const SideNavigationList = ({ profile, workspaces, setIsOpen }: SideNavig
             href={href}
             {...(setIsOpen && { onClick: () => setTimeout(() => setIsOpen?.(false), 100) })}
             className={cn(
-              "relative flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary h-8 group",
-              isActive ? "text-primary bg-muted hover:text-primary" : "text-muted-foreground"
+              "relative flex items-center gap-3 rounded-lg px-3 py-2 transition-all h-8 group",
+              isActive ? "text-primary bg-muted" : "text-muted-foreground"
             )}
           >
             <Icon className="h-4 w-4 group-hover:animate-jiggle transition-all" />

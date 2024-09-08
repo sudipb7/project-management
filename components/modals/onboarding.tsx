@@ -57,7 +57,7 @@ export const Onboarding = ({ profile }: { profile: Profile }) => {
       const { data: workspace } = await axios.post("/api/workspaces", body);
 
       toast.success("Workspace created successfully");
-      router.push(`/workspace/${workspace.id}`);
+      router.push(`/workspaces/${workspace.id}`);
       router.refresh();
     } catch (error: AxiosError | any) {
       if (error instanceof AxiosError) {
@@ -101,8 +101,8 @@ export const Onboarding = ({ profile }: { profile: Profile }) => {
               )}
             />
             <Button type="submit" disabled={isLoading} size="sm" className="w-full text-[0.8rem]">
-              {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? "Creating Workspace..." : "Create Workspace"}
+              {isLoading && <Loader className="mr-2 h-[0.8rem] w-[0.8rem] animate-spin" />}
+              {isLoading ? "Creating Workspace" : "Create Workspace"}
             </Button>
           </form>
         </Form>

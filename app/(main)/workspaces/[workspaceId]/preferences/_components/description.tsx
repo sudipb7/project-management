@@ -18,21 +18,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { WorkspacePreferencesProps } from "../page";
+import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 const schema = z.object({
-  name: z
+  description: z
     .string()
-    .min(3, { message: "Name must be at least 3 characters long" })
-    .max(32, { message: "Name must be at most 32 characters long" }),
+    .min(100, "Description must be at least 100 characters long")
+    .max(300, { message: "Description must be at most 300 characters long" }),
 });
 
 type FormValues = z.infer<typeof schema>;
 
-export const WorkspaceDisplayName = ({
+export const WorkspaceDescription = ({
   profile,
   isAdmin,
   currentWorkspace,
@@ -43,7 +43,7 @@ export const WorkspaceDisplayName = ({
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: currentWorkspace.name,
+      description: currentWorkspace.description || "",
     },
   });
 
@@ -62,18 +62,18 @@ export const WorkspaceDisplayName = ({
       await axios.patch(`/api/workspaces/${currentWorkspace.id}`, {
         ...values,
         adminId: profile.id,
-        description: workspace.description,
+        name: workspace.name,
         image: workspace.image,
         isPublic: workspace.visibility === WorkspaceVisibility.PUBLIC,
       });
 
-      toast.success("Workspace name updated successfully.");
+      toast.success("Workspace description updated successfully.");
       router.refresh();
     } catch (error: AxiosError | any) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data);
       } else {
-        toast.error(error?.message || "Failed to update workspace name.");
+        toast.error(error?.message || "Failed to update workspace description.");
       }
     }
   };
@@ -88,29 +88,27 @@ export const WorkspaceDisplayName = ({
     <Card className="mt-4">
       <CardHeader className="space-y-0.5 pb-2">
         <CardTitle className="text-sm tracking-[0.01em] font-medium font-mono">
-          Workspace Name
+          Workspace Description
         </CardTitle>
         <CardDescription className="text-[0.8rem]">
-          This is your workspace&apos;s visible name within Mk-1. For example, the name of your
-          company or department.
+          This is your workspace&apos;s description. You can change it anytime you want.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
-              name="name"
+              name="description"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
+                    <Textarea
                       {...field}
-                      type="text"
                       readOnly={!isAdmin}
                       disabled={isLoading}
-                      placeholder="Workspace Name"
-                      className="max-w-xs text-[0.8rem] h-9"
+                      placeholder="Workspace Description"
+                      className="max-w-xl text-[0.8rem] min-h-36 sm:min-h-28 md:min-h-[7.5rem] lg:min-h-24"
                     />
                   </FormControl>
                   <FormMessage />
@@ -123,15 +121,15 @@ export const WorkspaceDisplayName = ({
       {isAdmin && (
         <CardFooter className="border-t justify-between py-2">
           <p className="text-[0.8rem] text-muted-foreground">
-            Please use 32 characters at maximum.
+            Please use 300 characters at maximum.
           </p>
           <Button
             size="sm"
             onClick={requestSubmit}
-            className="text-[0.8rem] h-8"
-            disabled={isLoading || form.getValues("name") === currentWorkspace.name}
+            className="text-[0.8rem]"
+            disabled={isLoading || form.getValues("description") === currentWorkspace.description}
           >
-            {isLoading ? <Loader className="h-[13px] w-[13px] animate-spin" /> : "Save"}
+            {isLoading ? <Loader className="h-[0.8rem] w-[0.8rem] animate-spin" /> : "Save"}
           </Button>
         </CardFooter>
       )}

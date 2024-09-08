@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { SideNavigationList } from "./navigation/navigation-list";
 import { ProfileDropdownMenu } from "./profile-dropdown-menu";
 import { SideNavigationHeader } from "./navigation/navigation-header";
+import { Inbox } from "lucide-react";
 
 export const WorkspaceHeader = ({ profile }: { profile: Profile }) => {
   const params = useParams();
@@ -72,12 +73,12 @@ export const WorkspaceHeader = ({ profile }: { profile: Profile }) => {
           </div>
           <div className="max-md:hidden" />
           <div className="flex items-center gap-2.5">
+            <Button size="icon" variant="outline" className="h-7 w-8">
+              <Inbox className="h-3.5 w-3.5" />
+            </Button>
             <Button size="sm" variant="outline" className="h-7">
               <span className="text-[11px]">Feedback</span>
             </Button>
-            {
-              // TODO: Add more buttons here
-            }
           </div>
         </div>
       </header>

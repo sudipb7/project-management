@@ -3,7 +3,7 @@ import { ChannelType, MemberRole } from "@prisma/client";
 
 import { db } from "@/lib/db";
 import { WorkspaceSchema } from "@/lib/schema";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 
 export async function POST(req: Request) {
   try {

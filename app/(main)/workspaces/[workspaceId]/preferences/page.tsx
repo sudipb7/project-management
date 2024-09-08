@@ -1,14 +1,16 @@
 import { Member, Profile } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
 
+import {
+  WorkspaceDeletion,
+  WorkspaceDescription,
+  WorkspaceDisplayName,
+  WorkspaceImage,
+  WorkspaceLeave,
+} from "./_components";
 import { WorkspaceWithMembers } from "@/types";
-import { currentProfile } from "@/lib/profile";
-import { getWorkspacesByProfileId } from "@/lib/workspace";
-import { WorkspaceLeave } from "./_components/leave";
-import { WorkspaceImage } from "./_components/avatar";
-import { WorkspaceDeletion } from "./_components/deletion";
-import { WorkspaceDescription } from "./_components/description";
-import { WorkspaceDisplayName } from "./_components/display-name";
+import { currentProfile } from "@/lib/queries";
+import { getWorkspacesByProfileId } from "@/lib/queries";
 
 interface WorkspacePreferencesPageProps {
   params: {
@@ -66,7 +68,7 @@ export default async function WorkspacePreferencesPage({ params }: WorkspacePref
         <WorkspaceDescription {...props} />
         <WorkspaceImage {...props} />
         <WorkspaceLeave {...props} />
-        <WorkspaceDeletion {...props} />
+        {isAdmin && <WorkspaceDeletion {...props} />}
       </div>
     </div>
   );

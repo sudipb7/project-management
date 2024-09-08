@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 
 export async function GET(req: NextRequest, { params }: { params: { profileId: string } }) {
   try {

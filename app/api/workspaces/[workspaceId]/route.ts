@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { MemberRole, WorkspaceVisibility } from "@prisma/client";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/profile";
+import { currentProfile } from "@/lib/queries";
 import { WorkspaceSchema } from "@/lib/schema";
 
 export async function GET(req: NextRequest, { params }: { params: { workspaceId: string } }) {

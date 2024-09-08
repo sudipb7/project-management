@@ -4,13 +4,7 @@ import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useModal } from "@/components/providers/modal-provider";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -44,7 +38,7 @@ export const DeleteWorkpspaceModal = () => {
       });
 
       toast.success("Workspace deleted successfully");
-      router.push("/workspace");
+      router.push("/workspaces");
       router.refresh();
     } catch (error: AxiosError | any) {
       if (error instanceof AxiosError) {
@@ -90,8 +84,8 @@ export const DeleteWorkpspaceModal = () => {
             size="sm"
             className="w-full text-[0.8rem] "
           >
-            {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-            {isLoading ? "Deleting..." : "Confirm"}
+            {isLoading && <Loader className="mr-2 h-[0.8rem] w-[0.8rem] animate-spin" />}
+            {isLoading ? "Deleting" : "Confirm"}
           </Button>
         </form>
       </DialogContent>

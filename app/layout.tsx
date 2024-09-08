@@ -33,6 +33,7 @@ export default function RootLayout({
             attribute="class"
             defaultTheme="light"
             enableSystem
+            disableTransitionOnChange
             storageKey="mk-1-theme"
           >
             <SocketProvider>
