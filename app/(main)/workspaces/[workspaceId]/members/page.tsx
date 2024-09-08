@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { currentProfile } from "@/lib/queries";
 import { getWorkspaceById } from "@/lib/queries";
 import { columns, DataTable, InvitePeople } from "./_components";
-import { MemberTable, WorkspaceWithMembersAndProfile } from "@/types";
+import { MemberTable, WorkspaceWithMembersAndProfileAndInvites } from "@/types";
 
 export default async function WorkspaceMembersPage({
   params,
@@ -17,7 +17,8 @@ export default async function WorkspaceMembersPage({
 
   const workspace = (await getWorkspaceById(params.workspaceId, {
     includeProfile: true,
-  })) as WorkspaceWithMembersAndProfile;
+    includeInvites: true,
+  })) as WorkspaceWithMembersAndProfileAndInvites;
   if (!workspace) {
     return notFound();
   }
@@ -33,13 +34,16 @@ export default async function WorkspaceMembersPage({
 
   const modifiedMembers = workspace.members.map((member) => ({
     id: member.id,
-    userId: member.profileId,
+    userId: member.profile.userId,
+    profileId: member.profileId,
     role: member.role,
     createdAt: member.createdAt,
     workspaceId: member.workspaceId,
     email: member.profile.email,
     name: member.profile.name,
     image: member.profile.image,
+    members: workspace.members,
+    invites: workspace.invites,
   })) as MemberTable[];
 
   return (

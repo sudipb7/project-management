@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpDown } from "lucide-react";
+import { InviteStatus } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
 import type { MemberTable } from "@/types";
-import { Button } from "@/components/ui/button";
-import { MemberDropdown } from "./member-dropdown";
+import { MemberDropdownMenu } from "./member-dropdown-menu";
 
 export const columns: ColumnDef<MemberTable>[] = [
   {
@@ -43,19 +42,19 @@ export const columns: ColumnDef<MemberTable>[] = [
     header: "Role",
   },
   {
-    accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="h-9"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Joined at
-          <ArrowUpDown className="ml-1.5 h-3.5 w-3.5" />
-        </Button>
-      );
+    id: "joinMethod",
+    header: "Join Method",
+    cell({ row }) {
+      const invite = row.original.invites.filter(
+        (invite) =>
+          invite.profileId === row.original.profileId && invite.status === InviteStatus.ACCEPTED
+      )[0];
+      return invite ? invite.member.profile.name : "N/A";
     },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Member since",
     cell({ row }) {
       return new Date(row.original.createdAt).toLocaleDateString("en-US", {
         year: "numeric",
@@ -65,8 +64,8 @@ export const columns: ColumnDef<MemberTable>[] = [
     },
   },
   {
-    id: "select",
-    cell: ({ row }) => <MemberDropdown row={row} />,
+    id: "dropdown",
+    cell: ({ row }) => <MemberDropdownMenu row={row} />,
     enableSorting: false,
     enableHiding: false,
   },

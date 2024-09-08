@@ -140,7 +140,13 @@ export const getWorkspaceById = async (
     }
 
     if (includeInvites) {
-      include = { ...include, invites: true };
+      include = {
+        ...include,
+        invites: {
+          include: { member: { include: { profile: true } } },
+          orderBy: { createdAt: "desc" },
+        },
+      };
     }
 
     if (!workspaceId) {

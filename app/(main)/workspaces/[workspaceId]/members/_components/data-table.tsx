@@ -4,9 +4,9 @@ import React from "react";
 import {
   ColumnDef,
   flexRender,
-  SortingState,
   useReactTable,
   getCoreRowModel,
+  VisibilityState,
   getSortedRowModel,
   ColumnFiltersState,
   getFilteredRowModel,
@@ -29,8 +29,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Settings2 } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,18 +46,18 @@ interface DataTableProps<TData, TValue> {
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, columnFilters, rowSelection },
-    onSortingChange: setSorting,
+    state: { columnFilters, rowSelection, columnVisibility },
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
@@ -65,13 +72,38 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <CardDescription className="text-[0.8rem]">Manage your workspace members</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center justify-between pb-3">
+        <div className="flex items-center justify-between pb-3 gap-2.5">
           <Input
             placeholder="Search members..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
             className="max-w-sm text-[0.8rem] h-9 px-2.5"
           />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="text-[0.8rem] gap-1.5">
+                <Settings2 className="h-3.5 w-3.5" />
+                View
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize text-xs cursor-pointer"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div className="rounded-md border">
           <Table>
@@ -130,7 +162,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="h-8 text-[0.8rem]"
+            className="text-[0.8rem]"
           >
             Previous
           </Button>
@@ -139,7 +171,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="h-8 text-[0.8rem]"
+            className="text-[0.8rem]"
           >
             Next
           </Button>

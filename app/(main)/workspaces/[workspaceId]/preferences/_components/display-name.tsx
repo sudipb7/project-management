@@ -128,10 +128,10 @@ export const WorkspaceDisplayName = ({
           <Button
             size="sm"
             onClick={requestSubmit}
-            className="text-[0.8rem] h-8"
+            className="text-[0.8rem]"
             disabled={isLoading || form.getValues("name") === currentWorkspace.name}
           >
-            {isLoading ? <Loader className="h-[13px] w-[13px] animate-spin" /> : "Save"}
+            {isLoading ? <Loader className="h-[0.8rem] w-[0.8rem] animate-spin" /> : "Save"}
           </Button>
         </CardFooter>
       )}

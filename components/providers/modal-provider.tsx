@@ -1,15 +1,21 @@
 "use client";
 
 import * as React from "react";
-import { Profile } from "@prisma/client";
+import { MemberRole, Profile } from "@prisma/client";
 
 import { DeleteWorkpspaceModal } from "@/components/modals/delete-workspace";
 import { CreateWorkpspaceModal } from "@/components/modals/create-workspace";
+import { KickMemberModal } from "../modals/kick-member";
 
-export type ModalType = "create-workspace" | "delete-workspace" | "onboarding";
+export type ModalType = "create-workspace" | "delete-workspace" | "kick-member";
 
 export type ModalData = {
   profile?: Profile;
+  workspaceId?: string;
+  memberId?: string;
+  adminId?: string;
+  role?: MemberRole;
+  name?: string;
 };
 
 export type ModalState = {
@@ -83,6 +89,7 @@ function Modals() {
     <>
       <CreateWorkpspaceModal />
       <DeleteWorkpspaceModal />
+      <KickMemberModal />
     </>
   );
 }

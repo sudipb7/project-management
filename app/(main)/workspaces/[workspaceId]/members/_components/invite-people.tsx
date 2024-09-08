@@ -58,9 +58,9 @@ export const InvitePeople = ({ workspaceId, currentMemberId }: InviteMembersProp
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-bold font-mono">Invite</CardTitle>
+        <CardTitle className="font-bold font-mono">Invite People</CardTitle>
         <CardDescription className="text-[0.8rem]">
-          Invite members to your workspace by entering their email address.
+          Invite people to join your workspace
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -77,7 +77,7 @@ export const InvitePeople = ({ workspaceId, currentMemberId }: InviteMembersProp
                       {...field}
                       disabled={isLoading}
                       placeholder="john.doe@example.com"
-                      className="max-w-sm text-[0.8rem] h-9"
+                      className="max-w-sm text-[0.8rem]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -85,7 +85,7 @@ export const InvitePeople = ({ workspaceId, currentMemberId }: InviteMembersProp
               )}
             />
             <Button type="submit" disabled={isLoading} size="sm" className="text-[0.8rem]">
-              {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading && <Loader className="mr-2 h-[0.8rem] w-[0.8rem] animate-spin" />}
               {isLoading ? "Inviting" : "Invite"}
             </Button>
           </form>

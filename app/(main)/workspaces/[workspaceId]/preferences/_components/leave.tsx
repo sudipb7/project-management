@@ -89,9 +89,10 @@ export const WorkspaceLeave = ({
               disabled={isLoading}
               onClick={handleLeave}
               size="sm"
-              className="text-[0.8rem] h-8"
+              variant="destructive"
+              className="text-[0.8rem]"
             >
-              {isLoading ? <Loader className="h-[13px] w-[13px] animate-spin" /> : "Leave"}
+              {isLoading ? <Loader className="h-[0.8rem] w-[0.8rem] animate-spin" /> : "Leave"}
             </Button>
           </>
         )}

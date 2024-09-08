@@ -5,12 +5,14 @@ import { Profile, Workspace, Member, MemberRole, Invite } from "@prisma/client";
 
 export type MemberWithProfile = Member & { profile: Profile };
 
+export type InviteWithMemberProfile = Invite & { member: MemberWithProfile };
+
 export type WorkspaceWithMembers = Workspace & { members: Member[] };
 
 export type WorkspaceWithMembersAndProfile = Workspace & { members: MemberWithProfile[] };
 
 export type WorkspaceWithMembersAndProfileAndInvites = WorkspaceWithMembersAndProfile & {
-  invites: Invite[];
+  invites: InviteWithMemberProfile[];
 };
 
 export type GetWorkspaceIncludeOptions = {
@@ -44,6 +46,8 @@ export type MemberTable = {
   workspaceId: string;
   email: string;
   name: string;
+  members: MemberWithProfile[];
+  invites: InviteWithMemberProfile[];
   image: string | null;
 };
 

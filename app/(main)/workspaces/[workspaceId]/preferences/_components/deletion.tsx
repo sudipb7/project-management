@@ -39,7 +39,7 @@ export const WorkspaceDeletion = ({
               onClick={() => onOpen("delete-workspace", { profile })}
               size="sm"
               variant="destructive"
-              className="text-[0.8rem] h-8"
+              className="text-[0.8rem]"
             >
               Delete
             </Button>
